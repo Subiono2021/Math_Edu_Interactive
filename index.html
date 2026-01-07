@@ -1,0 +1,1133 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Matematika Interaktif - Portal Edukasi</title>
+	
+	<script async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']]
+      }
+    };
+    </script>
+	
+    <style>
+        :root {
+            --primary: #3498db;
+            --secondary: #2ecc71;
+            --accent: #e74c3c;
+            --dark: #2c3e50;
+            --light: #ecf0f1;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f7fa;
+            color: var(--dark);
+            line-height: 1.6;
+        }
+        
+        header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 1.5rem 0;
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+        
+        nav {
+            background-color: white;
+            padding: 1rem 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        
+        .nav-container {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        .nav-btn {
+            background-color: transparent;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            margin: 0 0.5rem;
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--dark);
+            cursor: pointer;
+            border-radius: 30px;
+            transition: all 0.3s ease;
+        }
+        
+        .nav-btn:hover, .nav-btn.active {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        main {
+            padding: 2rem 0;
+        }
+        
+        .section {
+            display: none;
+            background-color: white;
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+        
+        .section.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .section-title {
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--light);
+        }
+        
+        /* Kalkulator Baru Styles */
+        .tabs {
+            display: flex;
+            gap: 4px;
+            padding: 8px;
+            justify-content: center;
+            background: #e6eef9;
+            margin-bottom: 1rem;
+            border-radius: 8px;
+        }
+        
+        .tab {
+            padding: 10px 18px;
+            border-radius: 8px;
+            background: #fff;
+            cursor: pointer;
+            color: var(--primary);
+            font-weight: 600;
+            border: none;
+            transition: all 0.3s ease;
+        }
+        
+        .tab.active {
+            background: var(--primary);
+            color: #fff;
+        }
+        
+        .panel {
+            display: none;
+        }
+        
+        .panel.active {
+            display: block;
+        }
+        
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            align-items: start;
+        }
+        
+        .calc-card {
+            background: var(--light);
+            padding: 12px;
+            border-radius: 10px;
+            box-shadow: 0 1px 6px rgba(20,30,50,.06);
+        }
+        
+        .display {
+            background: #0b1220;
+            color: #7cff97;
+            padding: 10px;
+            font-size: 28px;
+            border-radius: 6px;
+            text-align: right;
+            min-height: 44px;
+            margin-bottom: 8px;
+        }
+        
+        .btn {
+            padding: 10px 12px;
+            border-radius: 8px;
+            border: none;
+            background: #eef6ff;
+            color: var(--primary);
+            cursor: pointer;
+            margin: 4px;
+            transition: all 0.2s ease;
+        }
+        
+        .btn:hover {
+            background: #dbeafe;
+        }
+        
+        .btn.op {
+            background: var(--primary);
+            color: #fff;
+        }
+        
+        .btn.op:hover {
+            background: #2980b9;
+        }
+        
+        .btn.eq {
+            background: #0b1220;
+            color: #fff;
+        }
+        
+        .btn.eq:hover {
+            background: #1a2436;
+        }
+        
+        .btn.del {
+            background: #e53e3e;
+            color: #fff;
+        }
+        
+        .btn.del:hover {
+            background: #c53030;
+        }
+        
+        .sci-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 8px;
+            margin-top: 10px;
+        }
+        
+        .sci-input {
+            width: 100%;
+            padding: 10px;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+        
+        .graph-card {
+            background: var(--light);
+            padding: 12px;
+            border-radius: 10px;
+            box-shadow: 0 1px 6px rgba(20,30,50,.06);
+        }
+        
+        .graph-toolbar {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+        
+        .graph-canvas {
+            width: 100%;
+            height: 480px;
+            border-radius: 8px;
+            background: #fff;
+            border: 1px solid #ddd;
+            display: block;
+        }
+        
+        .func-buttons {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+            margin-bottom: 8px;
+        }
+        
+        .func-buttons button {
+            padding: 6px 10px;
+            border-radius: 6px;
+            border: 1px solid #d0d7de;
+            background: #fbfdff;
+            cursor: pointer;
+            font-size: 12px;
+        }
+        
+        .legend {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-top: 8px;
+        }
+        
+        .legend-item {
+            display: flex;
+            gap: 6px;
+            align-items: center;
+            font-size: 13px;
+        }
+        
+        .color-swatch {
+            width: 14px;
+            height: 14px;
+            border-radius: 3px;
+            display: inline-block;
+        }
+        
+        .info {
+            color: #666;
+            font-size: 13px;
+            margin-top: 8px;
+        }
+        
+        .controls-row {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            flex-wrap: wrap;
+            margin-bottom: 8px;
+        }
+        
+        /* Tambahan untuk permainan matematika */
+        .games-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+        
+        .game-card {
+            background-color: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            text-align: center;
+            cursor: pointer;
+        }
+        
+        .game-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+        }
+        
+        .game-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: var(--primary);
+        }
+        
+        .game-title {
+            font-size: 1.4rem;
+            margin-bottom: 0.5rem;
+            color: var(--dark);
+        }
+        
+        .game-description {
+            color: #666;
+            font-size: 0.95rem;
+            margin-bottom: 1rem;
+        }
+        
+        footer {
+            background-color: var(--dark);
+            color: white;
+            text-align: center;
+            padding: 2rem 0;
+            margin-top: 3rem;
+        }
+        
+        @media (max-width: 900px) {
+            .grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .sci-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .games-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>
+			<b><a href="https://sites.google.com/view/rumahmath/home"
+   target="_blank"
+   style="color: white; text-decoration: none;">
+   BiMath:
+</a> Matematika Interaktif di Era AI</b>
+			</h1>
+            <p class="subtitle">
+			<b>Portal Edukasi Matematika untuk Semua Tingkat sebagai Pembelajaran Mendalam dan Menyenangkan.</b>
+			</p>
+			<p class="subtitle">
+			<b>This work has benefited from discussions and collaborative engagement with DeepSeek, ChatGPT and Google Gemini, whose contributions are gratefully acknowledged.</b>
+			</p>
+        </div>
+    </header>
+    
+    <nav>
+        <div class="container nav-container">
+            <button class="nav-btn active" data-target="beranda">Beranda</button>
+            <button class="nav-btn" data-target="kalkulator">Kalkulator</button>
+            <button class="nav-btn" data-target="geometri">Geometri</button>
+            <button class="nav-btn" data-target="aljabar">Aljabar</button>
+            <button class="nav-btn" data-target="statistika">Statistika</button>
+            <!-- Tambahan menu Permainan Matematika -->
+            <button class="nav-btn" data-target="permainan">Permainan Matematika</button>
+        </div>
+    </nav>
+    
+    <main class="container">
+        <section id="beranda" class="section active">
+            <h2 class="section-title"><b>Selamat Datang di Portal Matematika Interaktif</b></h2>
+			<button><p>This work has benefited from discussions and collaborative engagement with <b>DeepSeek</b>, <b>ChatGPT</b> and <b>Google Gemini</b>, whose contributions are gratefully acknowledged.</p></button>
+			<hr>
+			<br>
+<p align="justify">
+Portal ini dirancang untuk membantu <b>siswa</b>, <b>guru</b>, dan <b>semua pecinta matematika</b> dalam mempelajari <b>konsep matematika</b> dengan cara yang <b>menyenangkan</b> dan <b>interaktif</b>.
+</p>
+
+<p align="justify">
+<strong>Lupakan kesan sulit dan menakutkan!</strong> Di sini, matematika adalah <b>kebugaran</b> untuk <b>otak Anda</b> tempat di mana setiap tantangan yang Anda taklukkan akan membuat Anda 
+<strong>lebih kuat, lebih tangkas, dan lebih percaya diri.</strong> Rasakan sensasi “nuansa” saat sebuah teka-teki terpecahkan, dan kebanggaan ketika Anda akhirnya <em>memahami</em>, bukan sekadar menghafal. 
+Portal ini adalah <strong>panduan dan teman belajar</strong> Anda untuk mengalami sendiri bahwa 
+<strong>matematika itu hidup, relevan, dan sungguh-sungguh menyenangkan!</strong>
+</p>
+
+<p align="justify">
+Bagi <b>guru</b>, portal ini hadir sebagai <b>ruang refleksi dan pendamping pedagogis</b> di Era Kecerdasan Artifisial. AI diposisikan sebagai <em>alat bantu</em> untuk memperkaya strategi pembelajaran-membantu eksplorasi konsep, visualisasi ide abstrak, dan diferensiasi materi-tanpa menggantikan 
+<b>kebijaksanaan, empati, dan intuisi pedagogis</b> guru.
+</p>
+
+<p align="justify">
+Guru berperan sebagai <b>penuntun nalar</b>: mengarahkan siswa agar mampu <b>berpikir kritis</b>, <b>bertanya dengan benar</b>, <b>memverifikasi hasil</b>, dan <b>mengaitkan matematika dengan realitas kehidupan</b>. 
+Dengan pendampingan yang bijak, peserta didik tidak hanya <em>menggunakan</em> AI, tetapi juga <em>memahami batasannya</em>, sehingga proses pembelajaran tetap bermakna, etis, dan berorientasi pada pembentukan karakter.
+</p>
+
+<p align="justify">
+Melalui sinergi antara <b>guru, peserta didik, dan teknologi</b>, diharapkan lahir generasi pembelajar yang 
+<b>mandiri</b>, <b>bernalar kuat</b>, dan <b>bertanggung jawab</b>, mereka yang tidak sekadar mampu menjawab soal, tetapi juga mampu <strong>memahami, menilai, dan menggunakan pengetahuan secara bijak</strong> di dunia nyata.
+</p>
+
+            
+            <div style="margin-top: 2rem;">
+                <button class="btn" data-target="kalkulator" style="background-color: var(--primary); color: white; padding: 1rem 2rem; border: none; border-radius: 8px; font-size: 1.1rem; cursor: pointer;">
+                    Buka Kalkulator Scientific
+                </button>
+            </div>
+        </section>
+        
+        <section id="kalkulator" class="section">
+            <h2 class="section-title">Kalkulator Ilmiah</h2>
+            <p align="justify">
+			Kalkulator ini dirancang untuk melakukan perhitungan matematika dasar maupun lanjutan, termasuk operasi modulo pada bilangan bulat. Alat ini berfungsi sebagai fasilitas komputasi cepat yang dapat digunakan sebagai alternatif praktis dibandingkan perhitungan manual.
+			</p>
+            
+            <!-- Kalkulator Baru -->
+            <div class="tabs" role="tablist" aria-label="modes">
+                <div class="tab active" data-target="basic">Basic</div>
+                <div class="tab" data-target="scientific">Scientific</div>
+                <div class="tab" data-target="graph">Graph</div>
+            </div>
+
+            <div class="container">
+                <!-- BASIC -->
+                <section id="basic" class="panel active">
+                    <div class="grid">
+                        <div class="calc-card">
+                            <div class="display" id="basic-display">0</div>
+                            <div style="margin-top:8px;display:grid;grid-template-columns:repeat(4,1fr);gap:8px">
+                                <button class="btn" onclick="basicPress('7')">7</button>
+                                <button class="btn" onclick="basicPress('8')">8</button>
+                                <button class="btn" onclick="basicPress('9')">9</button>
+                                <button class="btn op" onclick="basicPress('/')">÷</button>
+
+                                <button class="btn" onclick="basicPress('4')">4</button>
+                                <button class="btn" onclick="basicPress('5')">5</button>
+                                <button class="btn" onclick="basicPress('6')">6</button>
+                                <button class="btn op" onclick="basicPress('*')">×</button>
+
+                                <button class="btn" onclick="basicPress('1')">1</button>
+                                <button class="btn" onclick="basicPress('2')">2</button>
+                                <button class="btn" onclick="basicPress('3')">3</button>
+                                <button class="btn op" onclick="basicPress('-')">−</button>
+
+                                <button class="btn" onclick="basicPress('0')">0</button>
+                                <button class="btn" onclick="basicPress('.')">.</button>
+                                <button class="btn" onclick="basicClear()">C</button>
+                                <button class="btn del" onclick="basicBackspace()">x</button>
+
+                                <button class="btn op" onclick="basicPress('+')">+</button>
+                                <button class="btn eq" style="grid-column:span 3" onclick="basicEvaluate()">=</button>
+                            </div>
+                        </div>
+
+                        <div class="calc-card">
+                            <h3 style="margin:6px 0">Quick Info</h3>
+                            <p class="info">Kalkulator basic untuk operasi aritmetika sederhana. Gunakan tombol "x" untuk menghapus satu karakter, "C" untuk menghapus semua. Gunakan tab Scientific untuk fungsi lanjutan.</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- SCIENTIFIC -->
+                <section id="scientific" class="panel">
+                    <div class="grid">
+                        <div class="calc-card">
+                            <h3>Scientific Calculator</h3>
+                            <!-- editable input so user can type and use template insertion -->
+                            <input id="sci-input" class="sci-input" type="text" placeholder="Masukkan ekspresi, mis. sin(pi/2)">
+
+                            <div class="sci-grid" style="margin-top:10px;">
+                                <button class="btn" onclick="sciTemplate('sin')">sin</button>
+                                <button class="btn" onclick="sciTemplate('cos')">cos</button>
+                                <button class="btn" onclick="sciTemplate('tan')">tan</button>
+                                <button class="btn" onclick="sciTemplate('ln')">ln</button>
+                                <button class="btn" onclick="sciTemplate('exp')">exp</button>
+
+                                <button class="btn" onclick="sciTemplate('sqrt')">sqrt</button>
+                                <button class="btn" onclick="sciTemplate('abs')">abs</button>
+                                <button class="btn" onclick="sciTemplate('x2')">x²</button>
+                                <button class="btn" onclick="sciTemplate('x3')">x³</button>
+                                <button class="btn" onclick="sciInsert('^')">^</button>
+
+                                <button class="btn" onclick="sciInsert('(')">(</button>
+                                <button class="btn" onclick="sciInsert(')')">)</button>
+                                <button class="btn" onclick="sciInsert('pi')">π</button>
+                                <button class="btn" onclick="sciInsert('e')">e</button>
+                                <button class="btn" onclick="sciInsert('/')">/</button>
+
+                                <button class="btn" onclick="sciInsert('*')">*</button>
+                                <button class="btn" onclick="sciInsert('+')">+</button>
+                                <button class="btn" onclick="sciInsert('-')">-</button>
+                                <button class="btn" onclick="sciInsert('.')">.</button>
+                                <button class="btn" onclick="sciInsert('%')">mod</button>
+                            </div>
+
+                            <div style="margin-top:12px; display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
+                                <label style="font-size:13px; color:#666">Modulo n (kosongkan = tanpa modulo):</label>
+                                <input id="sci-mod" type="number" placeholder="Contoh: 7" style="width:130px; padding:8px; border-radius:6px; border:1px solid #ccc">
+                                <button class="btn op" onclick="sciEvaluate()">= Evaluate</button>
+                                <button class="btn" onclick="sciClear()">Clear</button>
+                            </div>
+
+                            <div style="margin-top:10px">
+                                <label style="font-size:13px; color:#666">Hasil:</label>
+                                <input id="sci-output" type="text" readonly style="width:100%; padding:8px; border-radius:6px; border:1px solid #ddd">
+                            </div>
+                        </div>
+
+                        <div class="calc-card">
+                            <h3>Panduan Singkat</h3>
+                            <ul style="margin:0;padding-left:18px;color:#666">
+                                <li>Klik tombol fungsi untuk menyisipkan template fungsi (kursor otomatis berada di dalam kurung).</li>
+                                <li>Tulis ekspresi tambahan, contoh: sin(pi/2) + ln(5)</li>
+                                <li>Gunakan ^ untuk pangkat (mis. x^2). abs(x) untuk nilai mutlak.</li>
+                                <li>Jika mengisi Modulo n, hasil akan dipetakan ke range [0, n-1].</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- GRAPH -->
+                <section id="graph" class="panel">
+                    <div class="graph-card">
+                        <div class="graph-toolbar">
+                            <input id="graph-input" type="text" placeholder="Masukkan f(x), mis. sin(x)" style="flex:1;padding:8px;border-radius:8px;border:1px solid #ddd">
+                            <button class="btn op" onclick="plotFromInput()">Plot</button>
+                            <button class="btn" onclick="clearPlots()">Clear</button>
+                            <button class="btn" onclick="toggleCritical()">Toggle Critical</button>
+                            <button class="btn" onclick="exportPNG()">Export PNG</button>
+                        </div>
+
+                        <div class="func-buttons">
+                            <button onclick="graphInsert('sin(x)')">sin(x)</button>
+                            <button onclick="graphInsert('cos(x)')">cos(x)</button>
+                            <button onclick="graphInsert('tan(x)')">tan(x)</button>
+                            <button onclick="graphInsert('ln(x)')">ln(x)</button>
+                            <button onclick="graphInsert('exp(x)')">exp(x)</button>
+                            <button onclick="graphInsert('x^2')">x²</button>
+                            <button onclick="graphInsert('x^3')">x³</button>
+                            <button onclick="graphInsert('sqrt(x)')">sqrt(x)</button>
+                            <button onclick="graphInsert('1/x')">1/x</button>
+                            <button onclick="graphInsert('abs(x)')">abs(x)</button>
+                        </div>
+
+                        <div class="controls-row" style="margin-bottom:8px; gap:12px;">
+                            <label style="font-size:13px;color:#666">Sampling:</label>
+                            <input id="sampling" type="range" min="200" max="3000" value="1200" oninput="samplingLabel.innerText=this.value">
+                            <span id="samplingLabel">1200</span>
+                            <label style="font-size:13px;color:#666;margin-left:12px">X-min</label>
+                            <input id="x-min" type="number" value="-10" style="width:110px;padding:6px;border-radius:6px;border:1px solid #ccc">
+                            <label style="font-size:13px;color:#666">X-max</label>
+                            <input id="x-max" type="number" value="10" style="width:110px;padding:6px;border-radius:6px;border:1px solid #ccc">
+                        </div>
+
+                        <canvas id="graph-canvas" class="graph-canvas"></canvas>
+
+                        <div class="legend" id="legend"></div>
+                        <div class="info">Zoom: mouse wheel • Pan: drag • Klik tombol fungsi lalu klik Plot untuk menambah fungsi (multi-plot)</div>
+                    </div>
+                </section>
+            </div>
+        </section>
+        
+        <section id="geometri" class="section">
+            <h2 class="section-title"><a href="https://subiono2021.github.io/Geometri-2D-dan-3D/Geometri2025" target="blank">Visualisasi Geometri</a></h2>
+            <p>Jelajahi bentuk-bentuk geometri dengan visualisasi interaktif.</p>
+        </section>
+        
+        <section id="aljabar" class="section">
+            <h2 class="section-title">
+			<a href="https://subiono2021.github.io/Aljabar-AI/" target="_blank"><b>Aljabar dan Persamaan</b></a>
+			</h2>
+            <p>Alat untuk menyelesaikan persamaan aljabar dan memahami konsep aljabar dasar.</p>
+        </section>
+        
+        <section id="statistika" class="section">
+            <h2 class="section-title">
+			<a href="https://subiono2021.github.io/Statistika-AI/" target="_blank"><b>Statistika dan Analisis Data</b></a>
+			</h2>
+            <p>Alat untuk menganalisis data statistik dengan berbagai metode dan visualisasi.</p>
+        </section>
+        
+        <!-- Tambahan section Permainan Matematika -->
+        <section id="permainan" class="section">
+            <h2 class="section-title">Permainan Matematika</h2>
+            <p>Belajar matematika dengan cara yang menyenangkan melalui berbagai permainan interaktif.</p>
+            
+            <div class="games-grid">
+                <div class="game-card" onclick="alert('Permainan A akan diimplementasikan nanti')">
+    <div class="game-icon">A</div>
+    <h3 class="game-title"><b>8-Puzzle</b></h3>
+    <p class="game-description">
+	Permainan matematika untuk melatih kemampuan dasar mengurutkan $8$-angka dalam kotak permainan.
+	</p>
+
+    <a href="https://subiono2021.github.io/Puzzle8/Puzzle_8.html" 
+       target="_blank"
+       class="btn play-button"
+       onclick="event.stopPropagation();">
+        <button><mark><b>Mulai</b></mark></button>
+    </a>
+</div>
+                
+                <div class="game-card" onclick="alert('Permainan B akan diimplementasikan nanti')">
+                    <div class="game-icon">B</div>
+                    <h3 class="game-title"><b>Tac-Tic-Toe</b></h3>
+                    <p class="game-description">Tantangan logika dan pemecahan masalah permainan matematika tiga obyek terhubung menjadi satu garis lurus dalam media papan yang tersedia.</p>
+					
+                    <a href="https://subiono2021.github.io/TicTacToe/tactictoe.html" 
+                    target="_blank"
+                    class="btn play-button"
+                    onclick="event.stopPropagation();">
+                    <button><mark><b>Mulai</b></mark></button>
+                    </a>
+                </div>
+                
+                <div class="game-card" onclick="alert('Permainan C akan diimplementasikan nanti')">
+                    <div class="game-icon">C</div>
+                    <h3 class="game-title"><b>Rubik Matematika</b></h3>
+                    <p class="game-description">
+					Permainan konsep matematika lanjutan. Simulasi rubik 3D interaktif. Tombol-tombol bekerja, solver otomatis sederhana (membalik history), dan kontrol tampilan. Untuk memahami perputaran posisi warna yang sama dalam suatu persegi.
+					</p>			
+                    <a href="https://subiono2021.github.io/Rubik-Matematika/Rubik2025.html" 
+                    target="_blank"
+                    class="btn play-button"
+                    onclick="event.stopPropagation();">
+                    <button><mark><b>Mulai</b></mark></button>
+                    </a>
+                </div>
+				
+				<div class="game-card" onclick="alert('Permainan D akan diimplementasikan nanti')">
+                    <div class="game-icon">D</div>
+                    <h3 class="game-title"><b>BiMath's Invincible Magic Grid</b></h3>
+					<p class="game-description">
+					Matematika bukan musuh-ia adalah kebugaran mental tempat setiap tantangan melatih ketangguhan berpikir. BiMath's Invincible Magic Grid menghadirkan matematika sebagai petualangan interaktif yang mengubah:
+					<br>
+                    Kerumitan → Kejelasan<br>
+                    Hafalan → Pemahaman<br>
+                    Kebosanan → Rasa Penasaran.
+					</p>			
+                    <a href="https://subiono2021.github.io/Perseg-Ajaib/PersegiAjaib2025.html" 
+                    target="_blank"
+                    class="btn play-button"
+                    onclick="event.stopPropagation();">
+                    <button><mark><b>Mulai</b></mark></button>
+                    </a>
+                </div>
+				
+            </div>
+        </section>
+    </main>
+    
+    <footer>
+        <div class="container">
+            <p>
+			<a href="https://sites.google.com/view/rumahmath/home"
+   target="_blank"
+   style="color: white; text-decoration: none;">
+   <b>BiMath:</b>
+</a>
+Portal Matematika Interaktif &copy; 2027 - Dibuat untuk Pendidikan Matematika
+			</p>
+            <p>Semua alat dan simulasi tersedia untuk penggunaan publik dan edukasi</p>
+        </div>
+    </footer>
+
+    <script>
+        // Navigasi antar section
+        document.querySelectorAll('.nav-btn, .btn').forEach(button => {
+            button.addEventListener('click', function() {
+                const targetId = this.getAttribute('data-target');
+                if (targetId) {
+                    // Sembunyikan semua section
+                    document.querySelectorAll('.section').forEach(section => {
+                        section.classList.remove('active');
+                    });
+                    
+                    // Tampilkan section target
+                    document.getElementById(targetId).classList.add('active');
+                    
+                    // Update navigasi aktif
+                    document.querySelectorAll('.nav-btn').forEach(btn => {
+                        btn.classList.remove('active');
+                    });
+                    
+                    // Aktifkan tombol navigasi yang sesuai
+                    const navBtn = document.querySelector(`.nav-btn[data-target="${targetId}"]`);
+                    if (navBtn) {
+                        navBtn.classList.add('active');
+                    }
+                }
+            });
+        });
+        
+        /* ---------- Tab switching Kalkulator Baru ---------- */
+        document.querySelectorAll('.tab').forEach(t => t.addEventListener('click', () => {
+            document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));
+            t.classList.add('active');
+            document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+            document.getElementById(t.dataset.target).classList.add('active');
+        }));
+
+        /* ---------- BASIC ---------- */
+        const basicDisplay = document.getElementById('basic-display');
+        let basicBuffer = '';
+        function basicPress(v){ if(basicBuffer==='0') basicBuffer = v; else basicBuffer += v; basicDisplay.textContent = basicBuffer || '0'; }
+        function basicClear(){ basicBuffer = ''; basicDisplay.textContent = '0'; }
+        function basicBackspace(){
+            if(basicBuffer.length > 0) {
+                basicBuffer = basicBuffer.slice(0, -1);
+                basicDisplay.textContent = basicBuffer || '0';
+            }
+        }
+        function basicEvaluate(){ try { const r = Function('"use strict";return ('+basicBuffer+')')(); basicBuffer = String(r); basicDisplay.textContent = basicBuffer; } catch { basicDisplay.textContent = 'Error'; } }
+
+        /* ---------- SCIENTIFIC (insert template + cursor placement) ---------- */
+        const sciInput = document.getElementById('sci-input');
+        function insertAtCursor(el, text, caretOffset=0){
+            el.focus();
+            const start = el.selectionStart ?? el.value.length;
+            const end = el.selectionEnd ?? start;
+            const val = el.value;
+            const newVal = val.slice(0,start) + text + val.slice(end);
+            el.value = newVal;
+            const pos = Math.max(0, Math.min(newVal.length, start + text.length + caretOffset));
+            el.setSelectionRange(pos,pos);
+            el.focus();
+        }
+        function sciTemplate(name){
+            // x2, x3 are powers
+            if(name==='x2'){ insertAtCursor(sciInput, '^2', 0); return; }
+            if(name==='x3'){ insertAtCursor(sciInput, '^3', 0); return; }
+            // default: name()
+            insertAtCursor(sciInput, name + '()', -1);
+        }
+        function sciInsert(token){ insertAtCursor(sciInput, token, 0); }
+        function sciClear(){ sciInput.value=''; document.getElementById('sci-output').value=''; }
+
+        // Sanitizer & evaluator
+        function sanitizeExprForEval(s){
+            if(!s || typeof s !== 'string') return '';
+            // forbid dangerous tokens
+            const forbidden = /[;]|constructor|process|require|window|document|=>|eval|Function/gi;
+            if(forbidden.test(s)) throw new Error('Unsafe token');
+
+            // Convert π and common names robustly (allow 'pi' or 'π')
+            s = s.replace(/π/g, 'Math.PI').replace(/\bpi\b/gi,'Math.PI');
+
+            // Convert constants
+            s = s.replace(/\be\b/gi,'Math.E');
+
+            // Convert functions allowing optional spaces before '('
+            s = s.replace(/sin\s*\(/gi,'Math.sin(');
+            s = s.replace(/cos\s*\(/gi,'Math.cos(');
+            s = s.replace(/tan\s*\(/gi,'Math.tan(');
+            s = s.replace(/ln\s*\(/gi,'Math.log(');
+            s = s.replace(/exp\s*\(/gi,'Math.exp(');
+            s = s.replace(/sqrt\s*\(/gi,'Math.sqrt(');
+            s = s.replace(/abs\s*\(/gi,'Math.abs(');
+
+            // caret to exponent
+            s = s.replace(/\^/g,'**');
+
+            // allow 'mod' -> '%'
+            s = s.replace(/\bmod\b/gi, '%');
+
+            return s;
+        }
+
+        function sciEvaluate(){
+            try{
+                const raw = sciInput.value;
+                const cleaned = sanitizeExprForEval(raw);
+                // factorial naive: replace 5! -> factorial(5)
+                const factHandled = cleaned.replace(/([0-9]+)\s*!/g, 'factorial($1)');
+                const value = Function('"use strict";return ('+factHandled+')')();
+                let res = value;
+                // apply modulo if provided
+                const modEl = document.getElementById('sci-mod');
+                const modVal = modEl.value.trim();
+                if(modVal !== ''){
+                    const n = Number(modVal);
+                    if(!isNaN(n) && n !== 0) res = ((res % n) + n) % n;
+                }
+                document.getElementById('sci-output').value = String(res);
+            } catch(e){
+                document.getElementById('sci-output').value = 'Error';
+            }
+        }
+        function factorial(n){ n = Math.floor(n); if(n<0) return NaN; let r=1; for(let i=1;i<=n;i++) r*=i; return r; }
+
+        /* ---------- GRAPH ---------- */
+        const canvas = document.getElementById('graph-canvas');
+        const ctx = canvas.getContext('2d');
+        let DPR = window.devicePixelRatio || 1;
+        function resizeCanvas(){
+            const rect = canvas.getBoundingClientRect();
+            // fallback height if zero
+            if(rect.width === 0 || rect.height === 0){
+                canvas.style.width = '100%';
+                canvas.style.height = '480px';
+            }
+            const rect2 = canvas.getBoundingClientRect();
+            canvas.width = Math.round(rect2.width * DPR);
+            canvas.height = Math.round(rect2.height * DPR);
+            ctx.setTransform(DPR,0,0,DPR,0,0);
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        let plots = []; // {text, evaluator, color}
+        const COLORS = ["#e74c3c","#3498db","#2ecc71","#f39c12","#8e44ad","#16a085","#d35400","#1f78b4"];
+        let colorIdx = 0;
+        document.getElementById('sampling')?.addEventListener('input', () => {
+            const el = document.getElementById('sampling');
+            if(el) document.getElementById('samplingLabel').innerText = el.value;
+        });
+
+        function graphInsert(text){
+            document.getElementById('graph-input').value = text;
+        }
+
+        function parseToEvaluator(exprText){
+            try{
+                let s = String(exprText);
+
+                const forbidden = /[;]|constructor|process|require|window|document|=>|eval|Function/gi;
+                if(forbidden.test(s)) throw new Error('unsafe');
+
+                // Convert π and pi
+                s = s.replace(/π/g,'Math.PI').replace(/\bpi\b/gi,'Math.PI');
+
+                // constants
+                s = s.replace(/\be\b/gi,'Math.E');
+
+                // functions tolerant to spaces
+                s = s.replace(/sin\s*\(/gi,'Math.sin(');
+                s = s.replace(/cos\s*\(/gi,'Math.cos(');
+                s = s.replace(/tan\s*\(/gi,'Math.tan(');
+                s = s.replace(/ln\s*\(/gi,'Math.log(');
+                s = s.replace(/exp\s*\(/gi,'Math.exp(');
+                s = s.replace(/sqrt\s*\(/gi,'Math.sqrt(');
+                s = s.replace(/abs\s*\(/gi,'Math.abs(');
+
+                // caret to exponent
+                s = s.replace(/\^/g,'**');
+
+                // mod keyword
+                s = s.replace(/\bmod\b/gi,'%');
+
+                // Return function f(x)
+                const f = new Function('x', '"use strict"; return ('+s+');');
+                // Do not call with arbitrary x that might throw (domain), but return f
+                return f;
+            } catch(e){
+                return null;
+            }
+        }
+
+        function plotFromInput(){
+            const txt = document.getElementById('graph-input').value.trim();
+            if(!txt) return;
+            const ev = parseToEvaluator(txt);
+            if(!ev){ alert('Ekspresi grafik tidak valid. Periksa sintaks fungsi.'); return; }
+            plots.push({text: txt, evaluator: ev, color: COLORS[colorIdx % COLORS.length]});
+            colorIdx++;
+            drawAll();
+        }
+
+        function clearPlots(){ plots = []; colorIdx = 0; drawAll(); updateLegend(); }
+
+        function updateLegend(){
+            const legend = document.getElementById('legend');
+            legend.innerHTML = '';
+            plots.forEach(p => {
+                const d = document.createElement('div'); d.className='legend-item';
+                d.innerHTML = `<span class="color-swatch" style="background:${p.color}"></span><span>${p.text}</span>`;
+                legend.appendChild(d);
+            });
+        }
+
+        let view = {xMin: -10, xMax: 10, yMin: -6, yMax: 6};
+        let showCritical = true;
+
+        function xToPx(x){ 
+            const w = canvas.clientWidth; return ( (x - view.xMin)/(view.xMax - view.xMin) ) * w;
+        }
+        function yToPx(y){
+            const h = canvas.clientHeight; return (1 - ( (y - view.yMin)/(view.yMax - view.yMin) )) * h;
+        }
+
+        function drawGrid(){
+            ctx.clearRect(0,0,canvas.width/DPR, canvas.height/DPR);
+            const w = canvas.clientWidth, h = canvas.clientHeight;
+            ctx.save();
+            ctx.lineWidth = 1;
+            ctx.strokeStyle = '#eef2f7';
+            const xRange = view.xMax - view.xMin;
+            const xStep = chooseNiceStep(xRange);
+            const xStart = Math.ceil(view.xMin/xStep)*xStep;
+            for(let x=xStart;x<=view.xMax+1e-9;x+=xStep){
+                ctx.beginPath(); ctx.moveTo(xToPx(x),0); ctx.lineTo(xToPx(x),h); ctx.stroke();
+            }
+            const yRange = view.yMax - view.yMin;
+            const yStep = chooseNiceStep(yRange);
+            const yStart = Math.ceil(view.yMin/yStep)*yStep;
+            for(let y=yStart;y<=view.yMax+1e-9;y+=yStep){
+                ctx.beginPath(); ctx.moveTo(0,yToPx(y)); ctx.lineTo(w,yToPx(y)); ctx.stroke();
+            }
+            ctx.restore();
+            ctx.save(); ctx.strokeStyle='#222'; ctx.lineWidth=1.5;
+            if(view.yMin < 0 && view.yMax > 0){ ctx.beginPath(); ctx.moveTo(0,yToPx(0)); ctx.lineTo(w,yToPx(0)); ctx.stroke(); }
+            if(view.xMin < 0 && view.xMax > 0){ ctx.beginPath(); ctx.moveTo(xToPx(0),0); ctx.lineTo(xToPx(0),h); ctx.stroke(); }
+            ctx.restore();
+        }
+
+        function chooseNiceStep(range){
+            const target=8; const raw=range/target; const pow=Math.pow(10, Math.floor(Math.log10(raw))); const norm = raw/pow;
+            if(norm<=1) return pow; if(norm<=2) return 2*pow; if(norm<=5) return 5*pow; return 10*pow;
+        }
+
+        function drawAll(){
+            resizeCanvas();
+            drawGrid();
+            updateLegend();
+            const sampEl = document.getElementById('sampling');
+            const samp = sampEl ? Number(sampEl.value) : 800;
+            const w = canvas.clientWidth, h = canvas.clientHeight;
+
+            plots.forEach((p, idx)=>{
+                ctx.save();
+                ctx.strokeStyle = p.color; ctx.lineWidth = 2;
+                ctx.beginPath();
+                let first=true;
+                for(let i=0;i<=samp;i++){
+                    const t = i/samp;
+                    const x = view.xMin + t*(view.xMax - view.xMin);
+                    let y;
+                    try { y = p.evaluator(x); } catch { y = NaN; }
+                    if(!isFinite(y)){ first=true; continue; }
+                    const px = xToPx(x), py = yToPx(y);
+                    if(first){ ctx.moveTo(px,py); first=false; } else ctx.lineTo(px,py);
+                }
+                ctx.stroke();
+                ctx.restore();
+
+                if(showCritical){
+                    const crits = findCriticalPoints(p.evaluator, view.xMin, view.xMax);
+                    ctx.save(); ctx.fillStyle=p.color; ctx.strokeStyle='#fff';
+                    crits.forEach(pt=>{
+                        if(!isFinite(pt.y)) return;
+                        const px=xToPx(pt.x), py=yToPx(pt.y);
+                        ctx.beginPath(); ctx.arc(px,py,5,0,Math.PI*2); ctx.fill(); ctx.lineWidth=1; ctx.stroke();
+                    });
+                    ctx.restore();
+                }
+            });
+        }
+
+        // numeric derivative
+        function numericDerivative(fn,x){
+            const h = 1e-6;
+            const y1 = fn(x+h), y2 = fn(x-h);
+            if(!isFinite(y1)||!isFinite(y2)) return NaN;
+            return (y1 - y2) / (2*h);
+        }
+
+        function findCriticalPoints(fn, a, b){
+            const N = Math.max(200, Math.min(3000, Number(document.getElementById('sampling').value || 800)));
+            const dx = (b - a)/N;
+            const derivs = [];
+            for(let i=0;i<=N;i++){ const x = a + i*dx; derivs.push({x, d: numericDerivative(fn,x)}); }
+            const roots = [];
+            for(let i=1;i<derivs.length;i++){
+                const A = derivs[i-1], B = derivs[i];
+                if(!isFinite(A.d) || !isFinite(B.d)) continue;
+                if(Math.sign(A.d) === 0){ roots.push(A.x); continue; }
+                if(Math.sign(A.d) !== Math.sign(B.d)){
+                    let lo=A.x, hi=B.x, flo=A.d, fhi=B.d;
+                    for(let iter=0;iter<40;iter++){
+                        const mid = 0.5*(lo+hi);
+                        const fmid = numericDerivative(fn,mid);
+                        if(!isFinite(fmid)) break;
+                        if(Math.sign(fmid) === 0){ lo = hi = mid; break; }
+                        if(Math.sign(fmid) === Math.sign(flo)){ lo=mid; flo=fmid; } else { hi=mid; fhi=fmid; }
+                    }
+                    const root = 0.5*(lo+hi);
+                    if(!roots.some(r=>Math.abs(r-root) < 1e-6)) roots.push(root);
+                }
+            }
+            return roots.map(x=>({x, y: fn(x)}));
+        }
+
+        /* Interaction: zoom & pan */
+        canvas.addEventListener('wheel', e=>{
+            e.preventDefault();
+            const rect = canvas.getBoundingClientRect();
+            const mx = e.clientX - rect.left; const my = e.clientY - rect.top;
+            const x = view.xMin + (mx / rect.width) * (view.xMax - view.xMin);
+            const y = view.yMin + (1 - my / rect.height) * (view.yMax - view.yMin);
+            const zoomFactor = e.deltaY < 0 ? 0.9 : 1.1;
+            view.xMin = x + (view.xMin - x) * zoomFactor;
+            view.xMax = x + (view.xMax - x) * zoomFactor;
+            view.yMin = y + (view.yMin - y) * zoomFactor;
+            view.yMax = y + (view.yMax - y) * zoomFactor;
+            drawAll();
+        });
+
+        let dragging=false, last={x:0,y:0};
+        canvas.addEventListener('mousedown', e=>{ dragging=true; last.x=e.clientX; last.y=e.clientY; canvas.style.cursor='grabbing'; });
+        window.addEventListener('mouseup', ()=>{ dragging=false; canvas.style.cursor='default'; });
+        window.addEventListener('mousemove', e=>{
+            if(!dragging) return;
+            const dx = e.clientX - last.x, dy = e.clientY - last.y;
+            last.x = e.clientX; last.y = e.clientY;
+            const w = canvas.clientWidth, h = canvas.clientHeight;
+            const xShift = dx / w * (view.xMax - view.xMin);
+            const yShift = -dy / h * (view.yMax - view.yMin);
+            view.xMin -= xShift; view.xMax -= xShift; view.yMin -= yShift; view.yMax -= yShift;
+            drawAll();
+        });
+
+        /* utility: export PNG */
+        function exportPNG(){
+            const dataURL = canvas.toDataURL('image/png');
+            const a = document.createElement('a');
+            a.href = dataURL; a.download = 'graph.png';
+            a.click();
+        }
+
+        /* helpers */
+        function toggleCritical(){ showCritical = !showCritical; drawAll(); }
+
+        /* initial draw */
+        function resizeCanvas(){ 
+            const rect = canvas.getBoundingClientRect();
+            DPR = window.devicePixelRatio || 1;
+            canvas.width = Math.round(rect.width * DPR); canvas.height = Math.round(rect.height * DPR);
+            ctx.setTransform(DPR,0,0,DPR,0,0);
+        }
+        resizeCanvas();
+        window.addEventListener('load', ()=>{ resizeCanvas(); drawAll(); });
+        window.addEventListener('resize', ()=>{ resizeCanvas(); drawAll(); });
+
+        /* convenience: allow pressing Enter in graph input to plot */
+        document.getElementById('graph-input').addEventListener('keydown', e => { if(e.key==='Enter'){ plotFromInput(); } });
+
+        /* Plot helper that also supports multi-plot sequentially */
+        function plotFromInput(){
+            plotFromInputInternal();
+        }
+        function plotFromInputInternal(){
+            const txt = document.getElementById('graph-input').value.trim();
+            if(!txt) return;
+            const ev = parseToEvaluator(txt);
+            if(!ev){ alert('Ekspresi grafik tidak valid. Periksa sintaks fungsi.'); return; }
+            plots.push({text: txt, evaluator: ev, color: COLORS[(plots.length) % COLORS.length]});
+            updateLegend(); drawAll();
+        }
+
+        /* alias for GUI button */
+        function plotFunction(){ plotFromInputInternal(); }
+        function graphInsert(t){ document.getElementById('graph-input').value = t; }
+
+        /* clear/legend functions compatible with earlier names */
+        function clearPlots(){ plots=[]; updateLegend(); drawAll(); }
+
+        /* update legend (reuse) */
+        function updateLegend(){
+            const L = document.getElementById('legend'); L.innerHTML = '';
+            plots.forEach(p => {
+                const div = document.createElement('div'); div.className='legend-item';
+                div.innerHTML = `<span class="color-swatch" style="background:${p.color}"></span><span>${p.text}</span>`;
+                L.appendChild(div);
+            });
+        }
+
+        /* expose some functions to UI names used earlier */
+        window.plotFromInput = plotFromInput;
+        window.clearPlots = clearPlots;
+        window.toggleCritical = toggleCritical;
+        window.exportPNG = exportPNG;
+        window.graphInsert = graphInsert;
+        window.plotFunction = plotFromInputInternal;
+        window.clearPlot = clearPlots;
+    </script>
+</body>
+</html>
