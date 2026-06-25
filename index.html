@@ -1,1198 +1,1623 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Matematika Interaktif - Portal Edukasi</title>
-    
-    <!-- Hanya satu kali muat MathJax, tanpa polyfill.io yang berbahaya -->
-    <script async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-    <script>
-    MathJax = {
-      tex: {
-        inlineMath: [['$', '$'], ['\\(', '\\)']]
-      }
-    };
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+    <title>Math Pyro Blast - Ledakan Bertubi & Bilangan Bulat</title>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1">
     </script>
-    
+    <!-- KaTeX untuk render LaTeX -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" />
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js">
+    </script>
+
     <style>
-        :root {
-            --primary: #3498db;
-            --secondary: #2ecc71;
-            --accent: #e74c3c;
-            --dark: #2c3e50;
-            --light: #ecf0f1;
-        }
-        
+        /* ===== GAYA UTAMA (tetap sama seperti sebelumnya) ===== */
         * {
-            margin: 0;
-            padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            user-select: none;
         }
-        
         body {
-            background-color: #f5f7fa;
-            color: var(--dark);
-            line-height: 1.6;
-        }
-        
-        header {
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            color: white;
-            padding: 1.5rem 0;
-            text-align: center;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-        }
-        
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
-        
-        h1 {
-            font-size: 2.5rem;
-            margin-bottom: 0.5rem;
-        }
-        
-        .subtitle {
-            font-size: 1.2rem;
-            opacity: 0.9;
-        }
-        
-        nav {
-            background-color: white;
-            padding: 1rem 0;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-        }
-        
-        .nav-container {
+            font-family: 'Segoe UI', 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #e0e7ff 0%, #f1f5f9 100%);
             display: flex;
             justify-content: center;
-            flex-wrap: wrap;
-        }
-        
-        .nav-btn {
-            background-color: transparent;
-            border: none;
-            padding: 0.8rem 1.5rem;
-            margin: 0 0.5rem;
-            font-size: 1rem;
-            font-weight: 600;
-            color: var(--dark);
-            cursor: pointer;
-            border-radius: 30px;
-            transition: all 0.3s ease;
-        }
-        
-        .nav-btn:hover, .nav-btn.active {
-            background-color: var(--primary);
-            color: white;
-        }
-        
-        main {
-            padding: 2rem 0;
-        }
-        
-        .section {
-            display: none;
-            background-color: white;
-            border-radius: 12px;
-            padding: 2rem;
-            margin-bottom: 2rem;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-        }
-        
-        .section.active {
-            display: block;
-            animation: fadeIn 0.5s ease;
-        }
-        
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        
-        .section-title {
-            color: var(--primary);
-            margin-bottom: 1.5rem;
-            padding-bottom: 0.5rem;
-            border-bottom: 2px solid var(--light);
-        }
-        
-        /* Kalkulator Baru Styles */
-        .tabs {
-            display: flex;
-            gap: 4px;
-            padding: 8px;
-            justify-content: center;
-            background: #e6eef9;
-            margin-bottom: 1rem;
-            border-radius: 8px;
-        }
-        
-        .tab {
-            padding: 10px 18px;
-            border-radius: 8px;
-            background: #fff;
-            cursor: pointer;
-            color: var(--primary);
-            font-weight: 600;
-            border: none;
-            transition: all 0.3s ease;
-        }
-        
-        .tab.active {
-            background: var(--primary);
-            color: #fff;
-        }
-        
-        .panel {
-            display: none;
-        }
-        
-        .panel.active {
-            display: block;
-        }
-        
-        .grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 16px;
-            align-items: start;
-        }
-        
-        .calc-card {
-            background: var(--light);
-            padding: 12px;
-            border-radius: 10px;
-            box-shadow: 0 1px 6px rgba(20,30,50,.06);
-        }
-        
-        .display {
-            background: #0b1220;
-            color: #7cff97;
-            padding: 10px;
-            font-size: 28px;
-            border-radius: 6px;
-            text-align: right;
-            min-height: 44px;
-            margin-bottom: 8px;
-        }
-        
-        .btn {
-            padding: 10px 12px;
-            border-radius: 8px;
-            border: none;
-            background: #eef6ff;
-            color: var(--primary);
-            cursor: pointer;
-            margin: 4px;
-            transition: all 0.2s ease;
-        }
-        
-        .btn:hover {
-            background: #dbeafe;
-        }
-        
-        .btn.op {
-            background: var(--primary);
-            color: #fff;
-        }
-        
-        .btn.op:hover {
-            background: #2980b9;
-        }
-        
-        .btn.eq {
-            background: #0b1220;
-            color: #fff;
-        }
-        
-        .btn.eq:hover {
-            background: #1a2436;
-        }
-        
-        .btn.del {
-            background: #e53e3e;
-            color: #fff;
-        }
-        
-        .btn.del:hover {
-            background: #c53030;
-        }
-        
-        .sci-grid {
-            display: grid;
-            grid-template-columns: repeat(5, 1fr);
-            gap: 8px;
-            margin-top: 10px;
-        }
-        
-        .sci-input {
-            width: 100%;
-            padding: 10px;
-            border-radius: 8px;
-            border: 1px solid #ddd;
-            font-size: 16px;
-            margin-bottom: 10px;
-        }
-        
-        .graph-card {
-            background: var(--light);
-            padding: 12px;
-            border-radius: 10px;
-            box-shadow: 0 1px 6px rgba(20,30,50,.06);
-        }
-        
-        .graph-toolbar {
-            display: flex;
-            gap: 8px;
-            flex-wrap: wrap;
             align-items: center;
-            margin-bottom: 8px;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+            overflow-x: hidden;
+            transition: background 0.8s ease-in-out;
         }
-        
-        .graph-canvas {
+        body.night-sky {
+            background: radial-gradient(ellipse at center, #0a0f2a 0%, #030518 100%);
+        }
+        .game-layout {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 40px;
+            flex-wrap: wrap;
+            max-width: 1200px;
             width: 100%;
-            height: 480px;
-            border-radius: 8px;
-            background: #fff;
-            border: 1px solid #ddd;
-            display: block;
         }
-        
-        .func-buttons {
+        .title-3d {
+            background: linear-gradient(145deg, #ffb347, #ff6b6b);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            text-shadow: 0px 1px 0px #c94f4f, 0px 2px 0px #b13e3e, 0px 3px 0px #9a2e2e, 0px 4px 0px #832020, 0px 5px 0px #6c1414, 0px 6px 0px #550a0a, 0px 7px 0px #3e0202, 0px 8px 0px #270000, 0px 10px 10px rgba(0, 0, 0, 0.4);
+            font-size: 3.2rem;
+            font-weight: 900;
+            letter-spacing: 4px;
+            text-align: center;
+            line-height: 1.2;
+            margin: 0;
+            transform: rotate(-2deg) perspective(800px) translateZ(0);
+        }
+        .title-3d::before,
+        .title-3d::after {
+            content: "✨";
+            font-size: 2rem;
+            display: inline-block;
+            text-shadow: none;
+            background: none;
+            color: gold;
+        }
+        .title-3d::before {
+            margin-right: 12px;
+        }
+        .title-3d::after {
+            margin-left: 12px;
+        }
+        .title-box {
+            background: rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(4px);
+            padding: 30px 25px;
+            border-radius: 64px;
+            box-shadow: 0 25px 35px -10px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.3);
+            border: 1px solid rgba(255, 215, 0, 0.5);
+            text-align: center;
+            min-width: 220px;
+        }
+        .subtitle {
+            font-size: 0.9rem;
+            color: #facc15;
+            background: #1e293bcc;
+            display: inline-block;
+            padding: 6px 14px;
+            border-radius: 40px;
+            margin-top: 12px;
+            font-weight: bold;
+            backdrop-filter: blur(4px);
+        }
+        .container {
+            background: #ffffff;
+            padding: 25px 30px;
+            border-radius: 48px;
+            box-shadow: 0 25px 40px -12px rgba(0, 0, 0, 0.25);
+            width: 780px;
+            max-width: 100%;
+            text-align: center;
+            position: relative;
+            z-index: 15;
+            border: 1px solid rgba(79, 70, 229, 0.2);
+            transition: all 0.3s;
+        }
+        body.night-sky .container {
+            background: rgba(15, 25, 45, 0.75);
+            backdrop-filter: blur(4px);
+            color: white;
+            border-color: #facc15;
+            box-shadow: 0 0 25px rgba(250, 204, 21, 0.3);
+        }
+        body.night-sky .title-box {
+            background: rgba(0, 0, 0, 0.6);
+            border-color: #facc15;
+        }
+        body.night-sky .target-circle {
+            background: linear-gradient(145deg, #facc15, #eab308);
+            color: #1e293b;
+        }
+        body.night-sky .timer-card {
+            background: #0f172a;
+            border: 1px solid #facc15;
+        }
+        body.night-sky .shelf {
+            background: #1e293b;
+        }
+        body.night-sky .node {
+            box-shadow: 0 0 6px rgba(255, 255, 255, 0.2);
+        }
+        body.night-sky .zone {
+            background: #0f172a;
+            border-color: #facc15;
+            color: #facc15;
+        }
+        .timer-card {
+            background: #1e293b;
+            padding: 8px 20px;
+            border-radius: 60px;
+            display: inline-flex;
+            align-items: baseline;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        .timer-clock {
+            font-family: 'Courier New', monospace;
+            font-weight: 800;
+            font-size: 2rem;
+            color: #facc15;
+        }
+        .target-circle {
+            background: linear-gradient(145deg, #4f46e5, #6366f1);
+            color: white;
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
             display: flex;
-            gap: 6px;
-            flex-wrap: wrap;
-            margin-bottom: 8px;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            box-shadow: 0 10px 20px rgba(79, 70, 229, 0.4);
         }
-        
-        .func-buttons button {
-            padding: 6px 10px;
-            border-radius: 6px;
-            border: 1px solid #d0d7de;
-            background: #fbfdff;
+        .shelf {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            padding: 12px;
+            background: #f1f5f9;
+            border-radius: 28px;
+            margin-bottom: 20px;
+            min-height: 60px;
+            align-items: center;
+        }
+        .node {
+            padding: 8px 18px;
+            border-radius: 60px;
+            font-weight: bold;
+            font-size: 1.2rem;
+            cursor: grab;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.1s;
+        }
+        .node:active {
+            cursor: grabbing;
+        }
+        .num {
+            background: #0ea5e9;
+            color: white;
+        }
+        .ops {
+            background: #475569;
+            color: white;
+        }
+        .bracket {
+            background: #ec4899;
+            color: white;
+        }
+        .zone {
+            width: 100%;
+            min-height: 95px;
+            background: #fff9e8;
+            border: 3px dashed #4f46e5;
+            border-radius: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            padding: 12px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+        .zone span {
+            background: #4f46e5;
+            color: white;
+            padding: 6px 14px;
+            border-radius: 40px;
+            font-weight: bold;
             cursor: pointer;
-            font-size: 12px;
+            transition: 0.1s;
         }
-        
-        .legend {
-            display: flex;
-            gap: 8px;
-            flex-wrap: wrap;
+        .zone span:hover {
+            background: #dc2626;
+            transform: scale(0.96);
+        }
+        #feedback {
+            padding: 14px;
+            border-radius: 28px;
+            margin-bottom: 20px;
+            font-weight: bold;
+            display: none;
+        }
+        .btn {
+            padding: 14px;
+            border: none;
+            border-radius: 60px;
+            color: white;
+            font-weight: bold;
+            font-size: 1rem;
+            cursor: pointer;
+            width: 100%;
+            transition: 0.2s;
             margin-top: 8px;
         }
-        
-        .legend-item {
-            display: flex;
-            gap: 6px;
-            align-items: center;
-            font-size: 13px;
+        .btn-start {
+            background: #0f172a;
         }
-        
-        .color-swatch {
-            width: 14px;
-            height: 14px;
-            border-radius: 3px;
+        .btn-check {
+            background: #16a34a;
+        }
+        .btn-next {
+            background: #4f46e5;
+        }
+        .btn-manual {
+            background: #8b5cf6;
+            margin-bottom: 12px;
+        }
+        .difficulty-wrap {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 14px;
+            margin: 6px 0 14px 0;
+            font-weight: 600;
+        }
+        .diff-btn {
+            padding: 6px 22px;
+            border-radius: 40px;
+            border: 2px solid #cbd5e1;
+            background: transparent;
+            font-weight: 700;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: 0.2s;
+            color: #1e293b;
+        }
+        .diff-btn.active-sulit {
+            border-color: #f59e0b;
+            background: #fef3c7;
+            color: #b45309;
+            box-shadow: 0 0 0 2px #f59e0b44;
+        }
+        .diff-btn.active-sangat_sulit {
+            border-color: #ef4444;
+            background: #fee2e2;
+            color: #991b1b;
+            box-shadow: 0 0 0 2px #ef444444;
+        }
+        body.night-sky .diff-btn {
+            color: #f1f5f9;
+            border-color: #64748b;
+        }
+        body.night-sky .diff-btn.active-sulit {
+            border-color: #fbbf24;
+            background: #78350f;
+            color: #fde68a;
+        }
+        body.night-sky .diff-btn.active-sangat_sulit {
+            border-color: #f87171;
+            background: #7f1d1d;
+            color: #fecaca;
+        }
+        .manual-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.75);
+            backdrop-filter: blur(6px);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            visibility: hidden;
+            opacity: 0;
+            transition: visibility 0.25s, opacity 0.25s;
+        }
+        .manual-overlay.open {
+            visibility: visible;
+            opacity: 1;
+        }
+        .manual-card {
+            background: #1e293b;
+            color: #f1f5f9;
+            width: 94%;
+            max-width: 780px;
+            max-height: 88vh;
+            border-radius: 48px;
+            padding: 28px 34px;
+            box-shadow: 0 40px 60px rgba(0, 0, 0, 0.6);
+            border: 1px solid #facc15;
+            overflow-y: auto;
+            line-height: 1.6;
+            font-size: 1rem;
+        }
+        .manual-card h2 {
+            text-align: center;
+            color: #facc15;
+            font-size: 2rem;
+            margin-top: 0;
+            letter-spacing: 1px;
+        }
+        .manual-card h3 {
+            color: #a78bfa;
+            font-size: 1.3rem;
+            margin-top: 18px;
+            border-bottom: 1px dashed #475569;
+            padding-bottom: 4px;
+        }
+        .manual-card ul,
+        .manual-card ol {
+            padding-left: 24px;
+        }
+        .manual-card li {
+            margin-bottom: 6px;
+        }
+        .manual-card .latex-example {
+            background: #0f172a;
+            padding: 12px 18px;
+            border-radius: 20px;
+            margin: 12px 0;
+            text-align: center;
+            border: 1px solid #334155;
+            font-size: 1.2rem;
+        }
+        .manual-card .quote {
+            font-style: italic;
+            color: #cbd5e1;
+            background: #0f172a88;
+            padding: 12px 18px;
+            border-radius: 20px;
+            border-left: 4px solid #facc15;
+            margin: 8px 0;
+        }
+        .close-manual {
+            background: #ef4444;
+            border: none;
+            color: white;
+            font-weight: bold;
+            padding: 12px;
+            border-radius: 40px;
+            margin-top: 20px;
+            cursor: pointer;
+            width: 100%;
+            font-size: 1.1rem;
+            transition: 0.15s;
+        }
+        .close-manual:hover {
+            background: #dc2626;
+            transform: scale(0.98);
+        }
+        .challenge-badge {
+            background: linear-gradient(95deg, #f97316, #dc2626);
+            padding: 8px 12px;
+            border-radius: 40px;
+            font-size: 0.85rem;
+            font-weight: bold;
+            display: inline-block;
+            margin-bottom: 12px;
+            color: white;
+            transition: 0.3s;
+        }
+        .answer-reveal {
+            background: #0f172a;
+            color: #facc15;
+            padding: 12px 18px;
+            border-radius: 28px;
+            font-size: 1.3rem;
+            font-weight: bold;
+            margin: 8px 0;
+            border: 2px solid #facc15;
             display: inline-block;
         }
-        
-        .info {
-            color: #666;
-            font-size: 13px;
-            margin-top: 8px;
+        #fireworks-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 20;
         }
-        
-        .controls-row {
+        .button-group {
             display: flex;
-            gap: 8px;
-            align-items: center;
-            flex-wrap: wrap;
-            margin-bottom: 8px;
+            gap: 10px;
+            margin-top: 10px;
         }
-        
-        /* Tambahan untuk permainan matematika */
-        .games-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 2rem;
-            margin-top: 2rem;
+        .button-group .btn {
+            margin-top: 0;
         }
-        
-        .game-card {
-            background-color: white;
-            border-radius: 12px;
-            padding: 1.5rem;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            text-align: center;
-            cursor: pointer;
-        }
-        
-        .game-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 20px rgba(0,0,0,0.12);
-        }
-        
-        .game-icon {
-            font-size: 3rem;
-            margin-bottom: 1rem;
-            color: var(--primary);
-        }
-        
-        .game-title {
-            font-size: 1.4rem;
-            margin-bottom: 0.5rem;
-            color: var(--dark);
-        }
-        
-        .game-description {
-            color: #666;
-            font-size: 0.95rem;
-            margin-bottom: 1rem;
-        }
-        
-        footer {
-            background-color: var(--dark);
-            color: white;
-            text-align: center;
-            padding: 2rem 0;
-            margin-top: 3rem;
-        }
-        
-        @media (max-width: 900px) {
-            .grid {
-                grid-template-columns: 1fr;
+        @media (max-width: 800px) {
+            .game-layout {
+                flex-direction: column;
+                gap: 20px;
             }
-            
-            .sci-grid {
-                grid-template-columns: repeat(3, 1fr);
+            .title-3d {
+                font-size: 2.5rem;
+                transform: rotate(0deg);
+            }
+            .manual-card {
+                padding: 20px 18px;
+                max-width: 98%;
+            }
+            .container {
+                padding: 18px 16px;
+            }
+            .diff-btn {
+                padding: 4px 16px;
+                font-size: 0.8rem;
             }
         }
-        
-        @media (max-width: 768px) {
-            .games-grid {
-                grid-template-columns: 1fr;
+        .scene {
+            perspective: 800px;
+            display: inline-block;
+        }
+        .trophy {
+            position: relative;
+            transform-style: preserve-3d;
+            animation: spin 4s infinite linear;
+        }
+        .trophy span {
+            position: absolute;
+            font-size: 5rem;
+            color: #FFD700;
+            text-shadow: 0 0 5px #FFD700, 0 0 10px rgba(255, 215, 0, 0.8), 2px 2px 3px rgba(0, 0, 0, 0.5);
+        }
+        .trophy span:nth-child(1) {
+            transform: translateZ(0px);
+        }
+        .trophy span:nth-child(2) {
+            transform: translateZ(2px);
+            opacity: 0.95;
+        }
+        .trophy span:nth-child(3) {
+            transform: translateZ(4px);
+            opacity: 0.9;
+        }
+        .trophy span:nth-child(4) {
+            transform: translateZ(6px);
+            opacity: 0.85;
+        }
+        .trophy span:nth-child(5) {
+            transform: translateZ(8px);
+            opacity: 0.8;
+        }
+        .trophy span:nth-child(6) {
+            transform: translateZ(10px);
+            opacity: 0.75;
+        }
+        @keyframes spin {
+            0% {
+                transform: rotateX(15deg) rotateY(0deg);
             }
+            50% {
+                transform: rotateX(15deg) rotateY(180deg);
+            }
+            100% {
+                transform: rotateX(15deg) rotateY(360deg);
+            }
+        }
+        .manual-card::-webkit-scrollbar {
+            width: 6px;
+        }
+        .manual-card::-webkit-scrollbar-track {
+            background: #0f172a;
+            border-radius: 10px;
+        }
+        .manual-card::-webkit-scrollbar-thumb {
+            background: #facc15;
+            border-radius: 10px;
+        }
+        .badge-ops {
+            background: #334155;
+            color: #facc15;
+            border-radius: 20px;
+            padding: 2px 12px;
+            font-size: 0.7rem;
+            font-weight: bold;
+            display: inline-block;
+            margin-left: 6px;
         }
     </style>
 </head>
 <body>
-    <header>
-        <div class="container">
-            <h1>
-            <b><a href="https://sites.google.com/view/rumahmath/home"
-   target="_blank"
-   style="color: white; text-decoration: none;">
-   BiMath:
-</a> Matematika Interaktif di Era AI</b>
-            </h1>
-            <p class="subtitle">
-            <b>Portal Edukasi Matematika untuk Semua Tingkat sebagai Pembelajaran Mendalam dan Menyenangkan.</b>
-            </p>
-            <p class="subtitle">
-            <b>This work has benefited from discussions and collaborative engagement with DeepSeek, ChatGPT and Google Gemini, whose contributions are gratefully acknowledged.</b>
-            </p>
+
+    <canvas id="fireworks-canvas"></canvas>
+
+    <div class="game-layout">
+
+        <div class="title-box">
+            <div class="title-3d">BIMATH PYRO<br />BLAST</div>
+            <div class="subtitle">🔥 DRAG & LOGIC | EKSPRESI ACAK 🔥</div>
         </div>
-    </header>
-    
-    <nav>
-        <div class="container nav-container">
-            <button class="nav-btn active" data-target="beranda">Beranda</button>
-            <button class="nav-btn" data-target="kalkulator">Kalkulator</button>
-            <button class="nav-btn" data-target="geometri">Geometri</button>
-            <button class="nav-btn" data-target="aljabar">Aljabar</button>
-            <button class="nav-btn" data-target="statistika">Statistika</button>
-            <!-- Tambahan menu Permainan Matematika -->
-            <button class="nav-btn" data-target="permainan">Permainan Matematika</button>
+
+        <div class="container" id="mainContainer">
+
+            <button class="btn btn-manual" id="openManualBtn">📘 BUKU PANDUAN &amp; TANTANGAN</button>
+
+            <div class="challenge-badge" id="challengeMsg">⚡ TANTANGAN: 3 JAWABAN BENAR BERTURUT-TURUT!</div>
+
+            <!-- Pilihan kesulitan: SULIT dan SANGAT SULIT -->
+            <div class="difficulty-wrap">
+                <span style="opacity:0.7;">🎯</span>
+                <button class="diff-btn active-sulit" id="diffSulit" data-diff="sulit">🟡 SULIT <span class="badge-ops">2 ops</span></button>
+                <button class="diff-btn" id="diffSangatSulit" data-diff="sangat_sulit">🔴 SANGAT SULIT <span class="badge-ops">3 ops</span></button>
+                <span style="opacity:0.7; font-size:0.8rem;" id="diffLabel">(1–99)</span>
+            </div>
+
+            <div class="timer-card">
+                <span style="color:#cbd5e6; font-size:0.8rem;">⏱️ SISA WAKTU</span>
+                <span class="timer-clock" id="timerDisplay">02:00</span>
+            </div>
+
+            <div class="target-circle">
+                <div style="font-size: 0.6rem;">TARGET</div>
+                <div style="font-size: 2rem; font-weight: 900;" id="target-num">--</div>
+            </div>
+
+            <div class="shelf" id="num-shelf"></div>
+
+            <div class="shelf" id="ops-shelf">
+                <div class="node ops" draggable="true" data-v="+">+</div>
+                <div class="node ops" draggable="true" data-v="-">−</div>
+                <div class="node ops" draggable="true" data-v="*">×</div>
+                <div class="node ops" draggable="true" data-v="/">÷</div>
+                <div class="node bracket" draggable="true" data-v="(">(</div>
+                <div class="node bracket" draggable="true" data-v=")">)</div>
+            </div>
+
+            <div class="zone" id="drop-zone">Tekan MULAI, lalu drag angka/operator ke sini</div>
+
+            <div id="feedback"></div>
+
+            <div class="button-group">
+                <button class="btn btn-start" id="start-btn">🎮 MULAI (120 Detik)</button>
+                <button class="btn btn-check" id="check-btn" style="display:none;">🔍 CEK HASIL</button>
+                <button class="btn btn-next" id="next-btn" style="display:none;">🎲 SOAL BARU</button>
+            </div>
+
         </div>
-    </nav>
-    
-    <main class="container">
-        <section id="beranda" class="section active">
-            <h2 class="section-title"><b>Selamat Datang di Portal Matematika Interaktif</b></h2>
-            <button><p>This work has benefited from discussions and collaborative engagement with <b>DeepSeek</b>, <b>ChatGPT</b> and <b>Google Gemini</b>, whose contributions are gratefully acknowledged.</p></button>
-            <hr>
-            <br>
-<p align="justify">
-Portal ini dirancang untuk membantu <b>siswa</b>, <b>guru</b>, dan <b>semua pecinta matematika</b> dalam mempelajari <b>konsep matematika</b> dengan cara yang <b>menyenangkan</b> dan <b>interaktif</b>.
-</p>
+    </div>
 
-<p align="justify">
-<strong>Lupakan kesan sulit dan menakutkan!</strong> Di sini, matematika adalah <b>kebugaran</b> untuk <b>otak Anda</b> tempat di mana setiap tantangan yang Anda taklukkan akan membuat Anda 
-<strong>lebih kuat, lebih tangkas, dan lebih percaya diri.</strong> Rasakan sensasi “nuansa” saat sebuah teka-teki terpecahkan, dan kebanggaan ketika Anda akhirnya <em>memahami</em>, bukan sekadar menghafal. 
-Portal ini adalah <strong>panduan dan teman belajar</strong> Anda untuk mengalami sendiri bahwa 
-<strong>matematika itu hidup, relevan, dan sungguh-sungguh menyenangkan!</strong>
-</p>
+    <!-- ===== MANUAL MODAL ===== -->
+    <div id="manualModal" class="manual-overlay">
+        <div class="manual-card">
+            <h2>📖 Buku Panduan &amp; Tantangan</h2>
 
-<p align="justify">
-Bagi <b>guru</b>, portal ini hadir sebagai <b>ruang refleksi dan pendamping pedagogis</b> di Era Kecerdasan Artifisial. AI diposisikan sebagai <em>alat bantu</em> untuk memperkaya strategi pembelajaran-membantu eksplorasi konsep, visualisasi ide abstrak, dan diferensiasi materi-tanpa menggantikan 
-<b>kebijaksanaan, empati, dan intuisi pedagogis</b> guru.
-</p>
+            <h3>🎯 Cara Bermain</h3>
+            <ol>
+                <li>Pilih tingkat kesulitan:
+                    <br /><strong>🟡 SULIT</strong> → target <strong>1–99</strong>, gunakan <strong>3 angka</strong> dan <strong>2 operasi</strong>.
+                    <br /><strong>🔴 SANGAT SULIT</strong> → target <strong>101–999</strong>, gunakan <strong>4 angka</strong> dan <strong>3 operasi</strong>.
+                </li>
+                <li>Tekan <strong>MULAI</strong> → waktu 120 detik berjalan.</li>
+                <li><strong>Drag &amp; drop</strong> angka, operator (<strong>+ − × ÷</strong>) dan tanda kurung ke zona susun.</li>
+                <li>Klik elemen di zona untuk menghapusnya.</li>
+                <li>Tekan <strong>CEK HASIL</strong> untuk mengevaluasi ekspresi.</li>
+                <li>Jika hasilnya tepat <strong>TARGET</strong>, kamu menang! 🎆<br />
+                    <em style="color:#facc15;">Selebrasi kembang api dengan langit malam selama 60 detik.</em>
+                </li>
+                <li>Klik <strong>SOAL BARU</strong> kapan saja untuk menghentikan selebrasi dan lanjut ke tantangan berikutnya.</li>
+            </ol>
 
-<p align="justify">
-Guru berperan sebagai <b>penuntun nalar</b>: mengarahkan siswa agar mampu <b>berpikir kritis</b>, <b>bertanya dengan benar</b>, <b>memverifikasi hasil</b>, dan <b>mengaitkan matematika dengan realitas kehidupan</b>. 
-Dengan pendampingan yang bijak, peserta didik tidak hanya <em>menggunakan</em> AI, tetapi juga <em>memahami batasannya</em>, sehingga proses pembelajaran tetap bermakna, etis, dan berorientasi pada pembentukan karakter.
-</p>
-
-<p align="justify">
-Melalui sinergi antara <b>guru, peserta didik, dan teknologi</b>, diharapkan lahir generasi pembelajar yang 
-<b>mandiri</b>, <b>bernalar kuat</b>, dan <b>bertanggung jawab</b>, mereka yang tidak sekadar mampu menjawab soal, tetapi juga mampu <strong>memahami, menilai, dan menggunakan pengetahuan secara bijak</strong> di dunia nyata.
-</p>
-
-            
-            <div style="margin-top: 2rem;">
-                <button class="btn" data-target="kalkulator" style="background-color: var(--primary); color: white; padding: 1rem 2rem; border: none; border-radius: 8px; font-size: 1.1rem; cursor: pointer;">
-                    Buka Kalkulator Scientific
-                </button>
-            </div>
-        </section>
-        
-        <section id="kalkulator" class="section">
-            <h2 class="section-title">Kalkulator Ilmiah</h2>
-            <p align="justify">
-            Kalkulator ini dirancang untuk melakukan perhitungan matematika dasar maupun lanjutan, termasuk operasi modulo pada bilangan bulat. Alat ini berfungsi sebagai fasilitas komputasi cepat yang dapat digunakan sebagai alternatif praktis dibandingkan perhitungan manual.
-            </p>
-            
-            <!-- Kalkulator Baru -->
-            <div class="tabs" role="tablist" aria-label="modes">
-                <div class="tab active" data-target="basic">Basic</div>
-                <div class="tab" data-target="scientific">Scientific</div>
-                <div class="tab" data-target="graph">Graph</div>
-            </div>
-
-            <div class="container">
-                <!-- BASIC -->
-                <section id="basic" class="panel active">
-                    <div class="grid">
-                        <div class="calc-card">
-                            <div class="display" id="basic-display">0</div>
-                            <div style="margin-top:8px;display:grid;grid-template-columns:repeat(4,1fr);gap:8px">
-                                <button class="btn" onclick="basicPress('7')">7</button>
-                                <button class="btn" onclick="basicPress('8')">8</button>
-                                <button class="btn" onclick="basicPress('9')">9</button>
-                                <button class="btn op" onclick="basicPress('/')">÷</button>
-
-                                <button class="btn" onclick="basicPress('4')">4</button>
-                                <button class="btn" onclick="basicPress('5')">5</button>
-                                <button class="btn" onclick="basicPress('6')">6</button>
-                                <button class="btn op" onclick="basicPress('*')">×</button>
-
-                                <button class="btn" onclick="basicPress('1')">1</button>
-                                <button class="btn" onclick="basicPress('2')">2</button>
-                                <button class="btn" onclick="basicPress('3')">3</button>
-                                <button class="btn op" onclick="basicPress('-')">−</button>
-
-                                <button class="btn" onclick="basicPress('0')">0</button>
-                                <button class="btn" onclick="basicPress('.')">.</button>
-                                <button class="btn" onclick="basicClear()">C</button>
-                                <button class="btn del" onclick="basicBackspace()">x</button>
-
-                                <button class="btn op" onclick="basicPress('+')">+</button>
-                                <button class="btn eq" style="grid-column:span 3" onclick="basicEvaluate()">=</button>
-                            </div>
-                        </div>
-
-                        <div class="calc-card">
-                            <h3 style="margin:6px 0">Quick Info</h3>
-                            <p class="info">Kalkulator basic untuk operasi aritmetika sederhana. Gunakan tombol "x" untuk menghapus satu karakter, "C" untuk menghapus semua. Gunakan tab Scientific untuk fungsi lanjutan.</p>
-                        </div>
-                    </div>
-                </section>
-
-                <!-- SCIENTIFIC -->
-                <section id="scientific" class="panel">
-                    <div class="grid">
-                        <div class="calc-card">
-                            <h3>Scientific Calculator</h3>
-                            <!-- editable input so user can type and use template insertion -->
-                            <input id="sci-input" class="sci-input" type="text" placeholder="Masukkan ekspresi, mis. sin(pi/2)">
-
-                            <div class="sci-grid" style="margin-top:10px;">
-                                <button class="btn" onclick="sciTemplate('sin')">sin</button>
-                                <button class="btn" onclick="sciTemplate('cos')">cos</button>
-                                <button class="btn" onclick="sciTemplate('tan')">tan</button>
-                                <button class="btn" onclick="sciTemplate('ln')">ln</button>
-                                <button class="btn" onclick="sciTemplate('exp')">exp</button>
-
-                                <button class="btn" onclick="sciTemplate('sqrt')">sqrt</button>
-                                <button class="btn" onclick="sciTemplate('abs')">abs</button>
-                                <button class="btn" onclick="sciTemplate('x2')">x²</button>
-                                <button class="btn" onclick="sciTemplate('x3')">x³</button>
-                                <button class="btn" onclick="sciInsert('^')">^</button>
-
-                                <button class="btn" onclick="sciInsert('(')">(</button>
-                                <button class="btn" onclick="sciInsert(')')">)</button>
-                                <button class="btn" onclick="sciInsert('pi')">π</button>
-                                <button class="btn" onclick="sciInsert('e')">e</button>
-                                <button class="btn" onclick="sciInsert('/')">/</button>
-
-                                <button class="btn" onclick="sciInsert('*')">*</button>
-                                <button class="btn" onclick="sciInsert('+')">+</button>
-                                <button class="btn" onclick="sciInsert('-')">-</button>
-                                <button class="btn" onclick="sciInsert('.')">.</button>
-                                <button class="btn" onclick="sciInsert('%')">mod</button>
-                            </div>
-
-                            <div style="margin-top:12px; display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
-                                <label style="font-size:13px; color:#666">Modulo n (kosongkan = tanpa modulo):</label>
-                                <input id="sci-mod" type="number" placeholder="Contoh: 7" style="width:130px; padding:8px; border-radius:6px; border:1px solid #ccc">
-                                <button class="btn op" onclick="sciEvaluate()">= Evaluate</button>
-                                <button class="btn" onclick="sciClear()">Clear</button>
-                            </div>
-
-                            <div style="margin-top:10px">
-                                <label style="font-size:13px; color:#666">Hasil:</label>
-                                <input id="sci-output" type="text" readonly style="width:100%; padding:8px; border-radius:6px; border:1px solid #ddd">
-                            </div>
-                        </div>
-
-                        <div class="calc-card">
-                            <h3>Panduan Singkat</h3>
-                            <ul style="margin:0;padding-left:18px;color:#666">
-                                <li>Klik tombol fungsi untuk menyisipkan template fungsi (kursor otomatis berada di dalam kurung).</li>
-                                <li>Tulis ekspresi tambahan, contoh: sin(pi/2) + ln(5)</li>
-                                <li>Gunakan ^ untuk pangkat (mis. x^2). abs(x) untuk nilai mutlak.</li>
-                                <li>Jika mengisi Modulo n, hasil akan dipetakan ke range [0, n-1].</li>
-                            </ul>
-                        </div>
-                    </div>
-                </section>
-
-                <!-- GRAPH -->
-                <section id="graph" class="panel">
-                    <div class="graph-card">
-                        <div class="graph-toolbar">
-                            <input id="graph-input" type="text" placeholder="Masukkan f(x), mis. sin(x)" style="flex:1;padding:8px;border-radius:8px;border:1px solid #ddd">
-                            <button class="btn op" onclick="plotFromInput()">Plot</button>
-                            <button class="btn" onclick="clearPlots()">Clear</button>
-                            <button class="btn" onclick="toggleCritical()">Toggle Critical</button>
-                            <button class="btn" onclick="exportPNG()">Export PNG</button>
-                        </div>
-
-                        <div class="func-buttons">
-                            <button onclick="graphInsert('sin(x)')">sin(x)</button>
-                            <button onclick="graphInsert('cos(x)')">cos(x)</button>
-                            <button onclick="graphInsert('tan(x)')">tan(x)</button>
-                            <button onclick="graphInsert('ln(x)')">ln(x)</button>
-                            <button onclick="graphInsert('exp(x)')">exp(x)</button>
-                            <button onclick="graphInsert('x^2')">x²</button>
-                            <button onclick="graphInsert('x^3')">x³</button>
-                            <button onclick="graphInsert('sqrt(x)')">sqrt(x)</button>
-                            <button onclick="graphInsert('1/x')">1/x</button>
-                            <button onclick="graphInsert('abs(x)')">abs(x)</button>
-                        </div>
-
-                        <div class="controls-row" style="margin-bottom:8px; gap:12px;">
-                            <label style="font-size:13px;color:#666">Sampling:</label>
-                            <input id="sampling" type="range" min="200" max="3000" value="1200" oninput="samplingLabel.innerText=this.value">
-                            <span id="samplingLabel">1200</span>
-                            <label style="font-size:13px;color:#666;margin-left:12px">X-min</label>
-                            <input id="x-min" type="number" value="-10" style="width:110px;padding:6px;border-radius:6px;border:1px solid #ccc">
-                            <label style="font-size:13px;color:#666">X-max</label>
-                            <input id="x-max" type="number" value="10" style="width:110px;padding:6px;border-radius:6px;border:1px solid #ccc">
-                        </div>
-
-                        <canvas id="graph-canvas" class="graph-canvas"></canvas>
-
-                        <div class="legend" id="legend"></div>
-                        <div class="info">Zoom: mouse wheel • Pan: drag • Klik tombol fungsi lalu klik Plot untuk menambah fungsi (multi-plot)</div>
-                    </div>
-                </section>
-            </div>
-        </section>
-        
-        <section id="geometri" class="section">
-            <h2 class="section-title"><a href="https://subiono2021.github.io/Geometri-2D-dan-3D/Geometri2025" target="blank">Visualisasi Geometri</a></h2>
-            <p>Jelajahi bentuk-bentuk geometri dengan visualisasi interaktif.</p>
-        </section>
-        
-        <section id="aljabar" class="section">
-            <h2 class="section-title">
-            <a href="https://subiono2021.github.io/Aljabar-AI/" target="_blank"><b>Aljabar dan Persamaan</b></a>
-            </h2>
-            <p>Alat untuk menyelesaikan persamaan aljabar dan memahami konsep aljabar dasar.</p>
-        </section>
-        
-        <section id="statistika" class="section">
-            <h2 class="section-title">
-            <a href="https://subiono2021.github.io/Statistika-AI/" target="_blank"><b>Statistika dan Analisis Data</b></a>
-            </h2>
-            <p>Alat untuk menganalisis data statistik dengan berbagai metode dan visualisasi.</p>
-        </section>
-        
-        <!-- Tambahan section Permainan Matematika -->
-        <section id="permainan" class="section">
-            <h2 class="section-title">Permainan Matematika</h2>
-            <p>Belajar matematika dengan cara yang menyenangkan melalui berbagai permainan interaktif.</p>
-            
-            <div class="games-grid">
-                <div class="game-card" onclick="alert('Permainan A akan diimplementasikan nanti')">
-    <div class="game-icon">A</div>
-    <h3 class="game-title"><b>8-Puzzle</b></h3>
-    <p class="game-description">
-    Permainan matematika untuk melatih kemampuan dasar mengurutkan $8$-angka dalam kotak permainan.
-    </p>
-
-    <a href="https://subiono2021.github.io/Puzzle8/Puzzle_8.html" 
-       target="_blank"
-       class="btn play-button"
-       onclick="event.stopPropagation();">
-        <button><mark><b>Mulai</b></mark></button>
-    </a>
-</div>
-                
-                <div class="game-card" onclick="alert('Permainan B akan diimplementasikan nanti')">
-                    <div class="game-icon">B</div>
-                    <h3 class="game-title"><b>Tac-Tic-Toe</b></h3>
-                    <p class="game-description">Tantangan logika dan pemecahan masalah permainan matematika tiga obyek terhubung menjadi satu garis lurus dalam media papan yang tersedia.</p>
-                    
-                    <a href="https://subiono2021.github.io/TicTacToe/tactictoe.html" 
-                    target="_blank"
-                    class="btn play-button"
-                    onclick="event.stopPropagation();">
-                    <button><mark><b>Mulai</b></mark></button>
-                    </a>
-                </div>
-                
-                <div class="game-card" onclick="alert('Permainan C akan diimplementasikan nanti')">
-                    <div class="game-icon">C</div>
-                    <h3 class="game-title"><b>Rubik Matematika</b></h3>
-                    <p class="game-description">
-                    Permainan konsep matematika lanjutan. Simulasi rubik 3D interaktif. Tombol-tombol bekerja, solver otomatis sederhana (membalik history), dan kontrol tampilan. Untuk memahami perputaran posisi warna yang sama dalam suatu persegi.
-                    </p>            
-                    <a href="https://subiono2021.github.io/Rubik-Matematika/" 
-                    target="_blank"
-                    class="btn play-button"
-                    onclick="event.stopPropagation();">
-                    <button><mark><b>Mulai</b></mark></button>
-                    </a>
-                </div>
-                
-                <div class="game-card" onclick="alert('Permainan D akan diimplementasikan nanti')">
-                    <div class="game-icon">D</div>
-                    <h3 class="game-title"><b>BiMath's Invincible Magic Grid</b></h3>
-                    <p class="game-description">
-                    Matematika bukan musuh ia adalah kebugaran mental tempat setiap tantangan melatih ketangguhan berpikir. BiMath's Invincible Magic Grid menghadirkan matematika sebagai petualangan interaktif yang mengubah:
-                    <br>
-                    Kerumitan → Kejelasan<br>
-                    Hafalan → Pemahaman<br>
-                    Kebosanan → Rasa Penasaran.
-                    </p>     
-					<a href="https://subiono2021.github.io/Perseg-Ajaib/" 
-                    target="_blank"
-                    class="btn play-button"
-                    onclick="event.stopPropagation();">
-                    <button><mark><b>Mulai</b></mark></button>
-                    </a>
-                </div>
-                
-                <div class="game-card" onclick="alert('Permainan E akan diimplementasikan nanti')">
-                    <div class="game-icon">E</div>
-                    <h3 class="game-title"><b>BiMath: Dakon Interaktif</b></h3>
-                    <p class="game-description">
-                    Dakon (atau Congklak) adalah salah satu permainan papan tertua di dunia yang berakar dari tradisi Mancala.
-                    <br>
-                    Dakon adalah bukti bahwa nenek moyang kita telah mempraktikkan Aritmetika Modulo jauh sebelum istilah tersebut diformalkan dalam matematika modern. Temukan tantangan dalam permainan untuk mengalahkan PC.
-                    </p>            
-                    <a href="https://subiono2021.github.io/DakonBimath/" 
-                    target="_blank"
-                    class="btn play-button"
-                    onclick="event.stopPropagation();">
-                    <button><mark><b>Mulai</b></mark></button>
-                    </a>
-                </div>    
-
-                <div class="game-card" onclick="alert('Permainan F akan diimplementasikan nanti')">
-                    <div class="game-icon">F</div>
-                    <h3 class="game-title"><b>BiMath: Aritmetika Interaktif</b></h3>
-                    <p class="game-description">
-                    <b>BIMATH PYRO BLAST: Tantangan Nalar & Presisi</b>
-                    <br>
-                    Selamat datang di BIMATH PYRO BLAST, sebuah wahana interaktif untuk menguji ketangkasan logika aritmetika dan pemecahan masalah secara kreatif. Mainkan, susun strateginya, dan asah kemampuan berpikir kritis Anda sekarang!
-                    </p>            
-                    <a href="https://subiono2021.github.io/BiMathAritmetika/" 
-                    target="_blank"
-                    class="btn play-button"
-                    onclick="event.stopPropagation();">
-                    <button><mark><b>Mulai</b></mark></button>
-                    </a>
-                </div>
-				
-				<div class="game-card" onclick="alert('Permainan G akan diimplementasikan nanti')">
-                    <div class="game-icon">G</div>
-                    <h3 class="game-title"><b>BiMath: Persegi Ajaib $3\times 3$ dan $5\times 5$</b></h3>
-                    <p class="game-description">
-                    <b>BIMATH Persegi Ajaib order Ganjil: Tantangan Nalar & Presisi</b>
-                    <br>
-    Selamat datang di BIMATH Permainan Persegi Ajaib order Ganjil, sebuah wahana interaktif untuk menguji ketangkasan logika aritmetika dan pemecahan masalah secara kreatif. Mainkan, susun strateginya, dan asah kemampuan berpikir kritis Anda sekarang! Selamat menjelajah!
-  </p>
-                             
-                    <a href="https://subiono2021.github.io/PersegiAjaibGanjil/" 
-                    target="_blank"
-                    class="btn play-button"
-                    onclick="event.stopPropagation();">
-                    <button><mark><b>Mulai</b></mark></button>
-                    </a>
-                </div>
-                
-				<div class="game-card" onclick="alert('Permainan H akan diimplementasikan nanti')">
-                    <div class="game-icon">G</div>
-                    <h3 class="game-title"><b>BiMath: Persegi Ajaib $4\times 4$</b></h3>
-                    <p class="game-description">
-                    <b>BIMATH Persegi Ajaib order Genap: Tantangan Nalar & Presisi</b>
-                    <br>
-    Halaman ini adalah laboratorium matematika interaktif yang memungkinkan Anda mengeksplorasi konstruksi persegi ajaib 
- melalui pendekatan teori grup. Anda dapat memainkan permutasi-permutasi tertentu dan melihat secara langsung mana yang menghasilkan persegi ajaib (jumlah setiap baris, kolom, dan diagonal = 34) dan mana yang tidak.
-  </p>    
-                    <a href="https://subiono2021.github.io/PersegiAjaib_4/" 
-                    target="_blank"
-                    class="btn play-button"
-                    onclick="event.stopPropagation();">
-                    <button><mark><b>Mulai</b></mark></button>
-                    </a>
-                </div>
-				
-            </div>
-        </section>
-    </main>
-    
-    <footer>
-        <div class="container">
+            <h3>⚡ Pola Soal</h3>
             <p>
-            <a href="https://sites.google.com/view/rumahmath/home"
-   target="_blank"
-   style="color: white; text-decoration: none;">
-   <b>BiMath:</b>
-</a>
-Portal Matematika Interaktif &copy; 2027 - Dibuat untuk Pendidikan Matematika
+                <strong>🟡 SULIT (2 operasi, 3 angka, target 1–99):</strong><br />
+                Contoh: \((a+b)\times c\), \((a-b)\times c\), \(a\times b+c\), \((a+b)/c\), \(a+b+c\), \((a-b)+c\), \((a/b)+c\), dll.
             </p>
-            <p>Semua alat dan simulasi tersedia untuk penggunaan publik dan edukasi</p>
+            <p>
+                <strong>🔴 SANGAT SULIT (3 operasi, 4 angka, target 101–999):</strong><br />
+                Contoh: \((a+b)\times c+d\), \((a-b)\times c-d\), \((a+b+c)\times d\), \(a\times b+c\times d\), \((a\times b+c)\times d\), \(a\times b\times c+d\), \((a+b)/c\times d\), dll.
+            </p>
+
+            <h3>💥 Suara Rentetan Tembakan</h3>
+            <p>Setiap kembang api meledak dengan suara ledakan bertubi-tubi (rapid explosion) yang lebih seru!</p>
+
+            <h3>🧠 Manfaat Kecerdasan Psikomotorik</h3>
+            <ul>
+                <li>🤹‍♂️ Koordinasi Mata-Tangan</li>
+                <li>⚡ Kecepatan Reaksi</li>
+                <li>🧮 Logika &amp; Fleksibilitas Kognitif</li>
+                <li>🎯 Kontrol Motorik Halus</li>
+                <li>🧘 Regulasi Emosi</li>
+            </ul>
+
+            <h3>📐 Render LaTeX</h3>
+            <p>Panduan ini mendukung notasi matematika LaTeX, misalnya:</p>
+            <div class="latex-example">
+                \( \frac{a+b}{c} = 5 \) &nbsp;·&nbsp; \( \sqrt{144} = 12 \) &nbsp;·&nbsp; \( \sum_{i=1}^{n} i = \frac{n(n+1)}{2} \)
+            </div>
+
+            <div class="quote">
+                "Matematika bukan tentang seberapa cepat kamu menghitung, tapi tentang seberapa tepat kamu menalar jalan menuju solusi." — <strong>BiMath</strong>
+            </div>
+            <div class="quote">
+                "Setiap angka adalah potongan teka-teki. Tantangan ini ada bukan untuk menghentikanmu, tapi untuk mengasah ketajaman logikamu." — <strong>BiMath</strong>
+            </div>
+            <div class="quote">
+                "Waktu yang habis bukanlah akhir, melainkan tanda bahwa otakmu sedang bersiap untuk ledakan ide yang lebih besar di percobaan berikutnya." — <strong>BiMath</strong>
+            </div>
+
+            <button class="close-manual" id="closeManualBtn">TUTUP PANDUAN</button>
         </div>
-    </footer>
+    </div>
 
     <script>
-        // Navigasi antar section
-        document.querySelectorAll('.nav-btn, .btn').forEach(button => {
-            button.addEventListener('click', function() {
-                const targetId = this.getAttribute('data-target');
-                if (targetId) {
-                    // Sembunyikan semua section
-                    document.querySelectorAll('.section').forEach(section => {
-                        section.classList.remove('active');
-                    });
-                    
-                    // Tampilkan section target
-                    document.getElementById(targetId).classList.add('active');
-                    
-                    // Update navigasi aktif
-                    document.querySelectorAll('.nav-btn').forEach(btn => {
-                        btn.classList.remove('active');
-                    });
-                    
-                    // Aktifkan tombol navigasi yang sesuai
-                    const navBtn = document.querySelector(`.nav-btn[data-target="${targetId}"]`);
-                    if (navBtn) {
-                        navBtn.classList.add('active');
+        (function() {
+            // ================================================================
+            //  AUDIO RENTETAN LEDAKAN
+            // ================================================================
+            const audioCtx = new(window.AudioContext || window.webkitAudioContext)();
+
+            function playSingleExplosion() {
+                if (audioCtx.state === 'suspended') audioCtx.resume();
+                const now = audioCtx.currentTime;
+                const bufferSize = 0.2 * audioCtx.sampleRate;
+                const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+                const data = buffer.getChannelData(0);
+                for (let i = 0; i < bufferSize; i++) data[i] = Math.random() * 2 - 1;
+                const noise = audioCtx.createBufferSource();
+                noise.buffer = buffer;
+                const noiseGain = audioCtx.createGain();
+                noiseGain.gain.setValueAtTime(0.5, now);
+                noiseGain.gain.exponentialRampToValueAtTime(0.001, now + 0.2);
+                noise.connect(noiseGain);
+                noiseGain.connect(audioCtx.destination);
+                noise.start();
+                noise.stop(now + 0.2);
+
+                const osc = audioCtx.createOscillator();
+                const oscGain = audioCtx.createGain();
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(120, now);
+                osc.frequency.exponentialRampToValueAtTime(30, now + 0.15);
+                oscGain.gain.setValueAtTime(0.35, now);
+                oscGain.gain.exponentialRampToValueAtTime(0.001, now + 0.15);
+                osc.connect(oscGain);
+                oscGain.connect(audioCtx.destination);
+                osc.start();
+                osc.stop(now + 0.15);
+            }
+
+            function playRapidExplosions() {
+                const count = Math.floor(Math.random() * 4) + 3;
+                for (let i = 0; i < count; i++) {
+                    setTimeout(() => { playSingleExplosion(); }, i * 70);
+                }
+            }
+
+            // ================================================================
+            //  KEMBANG API ENGINE
+            // ================================================================
+            const canvas = document.getElementById('fireworks-canvas');
+            const ctx = canvas.getContext('2d');
+            let particles = [];
+            let fireworksActive = false;
+            let celebrationTimerId = null;
+            let fireworkIntervalId = null;
+
+            function resizeCanvas() { canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight; }
+            window.addEventListener('resize', resizeCanvas);
+            resizeCanvas();
+
+            class Particle {
+                constructor(x, y, color) {
+                    this.x = x;
+                    this.y = y;
+                    this.color = color;
+                    this.vel = { x: Math.random() * 6 - 3, y: Math.random() * 6 - 3 };
+                    this.life = 1.0;
+                    this.decay = Math.random() * 0.02 + 0.01;
+                }
+                draw() { ctx.globalAlpha = this.life;
+                    ctx.fillStyle = this.color;
+                    ctx.beginPath();
+                    ctx.arc(this.x, this.y, 3, 0, Math.PI * 2);
+                    ctx.fill(); }
+                update() { this.x += this.vel.x;
+                    this.y += this.vel.y;
+                    this.vel.y += 0.05;
+                    this.life -= this.decay; }
+            }
+
+            function createFirework() {
+                if (!fireworksActive) return;
+                const x = Math.random() * canvas.width;
+                const y = Math.random() * (canvas.height * 0.6) + 20;
+                const colors = ['#ff3366', '#facc15', '#44ffaa', '#3b82f6', '#ec4899', '#ff8c42', '#ff66cc'];
+                const color = colors[Math.floor(Math.random() * colors.length)];
+                playRapidExplosions();
+                for (let i = 0; i < 44; i++) particles.push(new Particle(x, y, color));
+            }
+
+            function animateFireworks() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                ctx.fillStyle = 'rgba(3,5,24,0.2)';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                particles = particles.filter(p => p.life > 0);
+                particles.forEach(p => { p.update();
+                    p.draw(); });
+                requestAnimationFrame(animateFireworks);
+            }
+            animateFireworks();
+
+            function startCelebration(callbackAfter) {
+                if (celebrationTimerId) clearTimeout(celebrationTimerId);
+                if (fireworkIntervalId) clearInterval(fireworkIntervalId);
+                fireworksActive = true;
+                document.body.classList.add('night-sky');
+                for (let i = 0; i < 12; i++) setTimeout(() => createFirework(), i * 100);
+                fireworkIntervalId = setInterval(() => { if (fireworksActive) createFirework(); }, 350);
+                celebrationTimerId = setTimeout(() => {
+                    fireworksActive = false;
+                    if (fireworkIntervalId) clearInterval(fireworkIntervalId);
+                    fireworkIntervalId = null;
+                    document.body.classList.remove('night-sky');
+                    particles = [];
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+                    if (callbackAfter) callbackAfter();
+                }, 60000);
+            }
+
+            function forceStopCelebration() {
+                if (celebrationTimerId) clearTimeout(celebrationTimerId);
+                if (fireworkIntervalId) clearInterval(fireworkIntervalId);
+                fireworksActive = false;
+                document.body.classList.remove('night-sky');
+                particles = [];
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+            }
+
+            // ================================================================
+            //  UTILITY
+            // ================================================================
+            function rand(min, max) { return Math.floor(Math.random() * (max - min + 1)) + min; }
+
+            function tryDivision(attempts, generator) {
+                for (let i = 0; i < attempts; i++) {
+                    const result = generator();
+                    if (result && result.target > 0 && Number.isInteger(result.target)) {
+                        return result;
                     }
                 }
-            });
-        });
-        
-        /* ---------- Tab switching Kalkulator Baru ---------- */
-        document.querySelectorAll('.tab').forEach(t => t.addEventListener('click', () => {
-            document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));
-            t.classList.add('active');
-            document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
-            document.getElementById(t.dataset.target).classList.add('active');
-        }));
-
-        /* ---------- BASIC ---------- */
-        const basicDisplay = document.getElementById('basic-display');
-        let basicBuffer = '';
-        function basicPress(v){ if(basicBuffer==='0') basicBuffer = v; else basicBuffer += v; basicDisplay.textContent = basicBuffer || '0'; }
-        function basicClear(){ basicBuffer = ''; basicDisplay.textContent = '0'; }
-        function basicBackspace(){
-            if(basicBuffer.length > 0) {
-                basicBuffer = basicBuffer.slice(0, -1);
-                basicDisplay.textContent = basicBuffer || '0';
-            }
-        }
-        function basicEvaluate(){ try { const r = Function('"use strict";return ('+basicBuffer+')')(); basicBuffer = String(r); basicDisplay.textContent = basicBuffer; } catch { basicDisplay.textContent = 'Error'; } }
-
-        /* ---------- SCIENTIFIC (insert template + cursor placement) ---------- */
-        const sciInput = document.getElementById('sci-input');
-        function insertAtCursor(el, text, caretOffset=0){
-            el.focus();
-            const start = el.selectionStart ?? el.value.length;
-            const end = el.selectionEnd ?? start;
-            const val = el.value;
-            const newVal = val.slice(0,start) + text + val.slice(end);
-            el.value = newVal;
-            const pos = Math.max(0, Math.min(newVal.length, start + text.length + caretOffset));
-            el.setSelectionRange(pos,pos);
-            el.focus();
-        }
-        function sciTemplate(name){
-            // x2, x3 are powers
-            if(name==='x2'){ insertAtCursor(sciInput, '^2', 0); return; }
-            if(name==='x3'){ insertAtCursor(sciInput, '^3', 0); return; }
-            // default: name()
-            insertAtCursor(sciInput, name + '()', -1);
-        }
-        function sciInsert(token){ insertAtCursor(sciInput, token, 0); }
-        function sciClear(){ sciInput.value=''; document.getElementById('sci-output').value=''; }
-
-        // Sanitizer & evaluator
-        function sanitizeExprForEval(s){
-            if(!s || typeof s !== 'string') return '';
-            // forbid dangerous tokens
-            const forbidden = /[;]|constructor|process|require|window|document|=>|eval|Function/gi;
-            if(forbidden.test(s)) throw new Error('Unsafe token');
-
-            // Convert π and common names robustly (allow 'pi' or 'π')
-            s = s.replace(/π/g, 'Math.PI').replace(/\bpi\b/gi,'Math.PI');
-
-            // Convert constants
-            s = s.replace(/\be\b/gi,'Math.E');
-
-            // Convert functions allowing optional spaces before '('
-            s = s.replace(/sin\s*\(/gi,'Math.sin(');
-            s = s.replace(/cos\s*\(/gi,'Math.cos(');
-            s = s.replace(/tan\s*\(/gi,'Math.tan(');
-            s = s.replace(/ln\s*\(/gi,'Math.log(');
-            s = s.replace(/exp\s*\(/gi,'Math.exp(');
-            s = s.replace(/sqrt\s*\(/gi,'Math.sqrt(');
-            s = s.replace(/abs\s*\(/gi,'Math.abs(');
-
-            // caret to exponent
-            s = s.replace(/\^/g,'**');
-
-            // allow 'mod' -> '%'
-            s = s.replace(/\bmod\b/gi, '%');
-
-            return s;
-        }
-
-        function sciEvaluate(){
-            try{
-                const raw = sciInput.value;
-                const cleaned = sanitizeExprForEval(raw);
-                // factorial naive: replace 5! -> factorial(5)
-                const factHandled = cleaned.replace(/([0-9]+)\s*!/g, 'factorial($1)');
-                const value = Function('"use strict";return ('+factHandled+')')();
-                let res = value;
-                // apply modulo if provided
-                const modEl = document.getElementById('sci-mod');
-                const modVal = modEl.value.trim();
-                if(modVal !== ''){
-                    const n = Number(modVal);
-                    if(!isNaN(n) && n !== 0) res = ((res % n) + n) % n;
-                }
-                document.getElementById('sci-output').value = String(res);
-            } catch(e){
-                document.getElementById('sci-output').value = 'Error';
-            }
-        }
-        function factorial(n){ n = Math.floor(n); if(n<0) return NaN; let r=1; for(let i=1;i<=n;i++) r*=i; return r; }
-
-        /* ---------- GRAPH ---------- */
-        const canvas = document.getElementById('graph-canvas');
-        const ctx = canvas.getContext('2d');
-        let DPR = window.devicePixelRatio || 1;
-        function resizeCanvas(){
-            const rect = canvas.getBoundingClientRect();
-            // fallback height if zero
-            if(rect.width === 0 || rect.height === 0){
-                canvas.style.width = '100%';
-                canvas.style.height = '480px';
-            }
-            const rect2 = canvas.getBoundingClientRect();
-            canvas.width = Math.round(rect2.width * DPR);
-            canvas.height = Math.round(rect2.height * DPR);
-            ctx.setTransform(DPR,0,0,DPR,0,0);
-        }
-        window.addEventListener('resize', resizeCanvas);
-        resizeCanvas();
-
-        let plots = []; // {text, evaluator, color}
-        const COLORS = ["#e74c3c","#3498db","#2ecc71","#f39c12","#8e44ad","#16a085","#d35400","#1f78b4"];
-        let colorIdx = 0;
-        document.getElementById('sampling')?.addEventListener('input', () => {
-            const el = document.getElementById('sampling');
-            if(el) document.getElementById('samplingLabel').innerText = el.value;
-        });
-
-        function graphInsert(text){
-            document.getElementById('graph-input').value = text;
-        }
-
-        function parseToEvaluator(exprText){
-            try{
-                let s = String(exprText);
-
-                const forbidden = /[;]|constructor|process|require|window|document|=>|eval|Function/gi;
-                if(forbidden.test(s)) throw new Error('unsafe');
-
-                // Convert π and pi
-                s = s.replace(/π/g,'Math.PI').replace(/\bpi\b/gi,'Math.PI');
-
-                // constants
-                s = s.replace(/\be\b/gi,'Math.E');
-
-                // functions tolerant to spaces
-                s = s.replace(/sin\s*\(/gi,'Math.sin(');
-                s = s.replace(/cos\s*\(/gi,'Math.cos(');
-                s = s.replace(/tan\s*\(/gi,'Math.tan(');
-                s = s.replace(/ln\s*\(/gi,'Math.log(');
-                s = s.replace(/exp\s*\(/gi,'Math.exp(');
-                s = s.replace(/sqrt\s*\(/gi,'Math.sqrt(');
-                s = s.replace(/abs\s*\(/gi,'Math.abs(');
-
-                // caret to exponent
-                s = s.replace(/\^/g,'**');
-
-                // mod keyword
-                s = s.replace(/\bmod\b/gi,'%');
-
-                // Return function f(x)
-                const f = new Function('x', '"use strict"; return ('+s+');');
-                // Do not call with arbitrary x that might throw (domain), but return f
-                return f;
-            } catch(e){
                 return null;
             }
-        }
 
-        function plotFromInput(){
-            const txt = document.getElementById('graph-input').value.trim();
-            if(!txt) return;
-            const ev = parseToEvaluator(txt);
-            if(!ev){ alert('Ekspresi grafik tidak valid. Periksa sintaks fungsi.'); return; }
-            plots.push({text: txt, evaluator: ev, color: COLORS[colorIdx % COLORS.length]});
-            colorIdx++;
-            drawAll();
-        }
+            // ================================================================
+            //  GENERATOR SOAL – SULIT (2 ops, 3 angka, target 1-99)
+            // ================================================================
+            function buildSulitPatterns() {
+                const patterns = [];
 
-        function clearPlots(){ plots = []; colorIdx = 0; drawAll(); updateLegend(); }
+                // 1. (a + b) * c
+                patterns.push(() => {
+                    let a = rand(1, 12),
+                        b = rand(1, 12),
+                        c = rand(1, 10);
+                    let t = (a + b) * c;
+                    if (t >= 1 && t <= 99) return { target: t, numbers: [a, b, c], expression: `(${a} + ${b}) × ${c}` };
+                    return null;
+                });
 
-        function updateLegend(){
-            const legend = document.getElementById('legend');
-            legend.innerHTML = '';
-            plots.forEach(p => {
-                const d = document.createElement('div'); d.className='legend-item';
-                d.innerHTML = `<span class="color-swatch" style="background:${p.color}"></span><span>${p.text}</span>`;
-                legend.appendChild(d);
-            });
-        }
+                // 2. (a - b) * c (a > b)
+                patterns.push(() => {
+                    let a = rand(2, 14),
+                        b = rand(1, a - 1),
+                        c = rand(1, 10);
+                    let t = (a - b) * c;
+                    if (t >= 1 && t <= 99) return { target: t, numbers: [a, b, c], expression: `(${a} − ${b}) × ${c}` };
+                    return null;
+                });
 
-        let view = {xMin: -10, xMax: 10, yMin: -6, yMax: 6};
-        let showCritical = true;
+                // 3. (a + b) / c (integer)
+                patterns.push(() => tryDivision(25, () => {
+                    let c = rand(1, 12);
+                    let a = rand(1, 14),
+                        b = rand(1, 14);
+                    let sum = a + b;
+                    if (sum % c === 0) { let t = sum / c; if (t >= 1 && t <= 99) return { target: t, numbers: [a, b, c],
+                            expression: `(${a} + ${b}) ÷ ${c}` }; }
+                    return null;
+                }));
 
-        function xToPx(x){ 
-            const w = canvas.clientWidth; return ( (x - view.xMin)/(view.xMax - view.xMin) ) * w;
-        }
-        function yToPx(y){
-            const h = canvas.clientHeight; return (1 - ( (y - view.yMin)/(view.yMax - view.yMin) )) * h;
-        }
+                // 4. (a - b) / c (integer, a > b)
+                patterns.push(() => tryDivision(25, () => {
+                    let c = rand(1, 10);
+                    let a = rand(2, 16),
+                        b = rand(1, a - 1);
+                    let diff = a - b;
+                    if (diff % c === 0) { let t = diff / c; if (t >= 1 && t <= 99) return { target: t, numbers: [a, b, c],
+                            expression: `(${a} − ${b}) ÷ ${c}` }; }
+                    return null;
+                }));
 
-        function drawGrid(){
-            ctx.clearRect(0,0,canvas.width/DPR, canvas.height/DPR);
-            const w = canvas.clientWidth, h = canvas.clientHeight;
-            ctx.save();
-            ctx.lineWidth = 1;
-            ctx.strokeStyle = '#eef2f7';
-            const xRange = view.xMax - view.xMin;
-            const xStep = chooseNiceStep(xRange);
-            const xStart = Math.ceil(view.xMin/xStep)*xStep;
-            for(let x=xStart;x<=view.xMax+1e-9;x+=xStep){
-                ctx.beginPath(); ctx.moveTo(xToPx(x),0); ctx.lineTo(xToPx(x),h); ctx.stroke();
+                // 5. a * b + c
+                patterns.push(() => {
+                    let a = rand(1, 12),
+                        b = rand(1, 12),
+                        c = rand(1, 15);
+                    let t = a * b + c;
+                    if (t >= 1 && t <= 99) return { target: t, numbers: [a, b, c], expression: `${a} × ${b} + ${c}` };
+                    return null;
+                });
+
+                // 6. a * b - c (positive)
+                patterns.push(() => {
+                    let a = rand(1, 12),
+                        b = rand(1, 12);
+                    let prod = a * b;
+                    let c = rand(1, Math.min(prod - 1, 20));
+                    let t = prod - c;
+                    if (t >= 1 && t <= 99) return { target: t, numbers: [a, b, c], expression: `${a} × ${b} − ${c}` };
+                    return null;
+                });
+
+                // 7. (a * b) / c (integer)
+                patterns.push(() => tryDivision(25, () => {
+                    let c = rand(1, 12);
+                    let a = rand(1, 14),
+                        b = rand(1, 14);
+                    let prod = a * b;
+                    if (prod % c === 0) { let t = prod / c; if (t >= 1 && t <= 99) return { target: t, numbers: [a, b, c],
+                            expression: `(${a} × ${b}) ÷ ${c}` }; }
+                    return null;
+                }));
+
+                // 8. a + b + c
+                patterns.push(() => {
+                    let a = rand(1, 12),
+                        b = rand(1, 12),
+                        c = rand(1, 12);
+                    let t = a + b + c;
+                    if (t >= 1 && t <= 99) return { target: t, numbers: [a, b, c], expression: `${a} + ${b} + ${c}` };
+                    return null;
+                });
+
+                // 9. a - b - c (positive)
+                patterns.push(() => {
+                    let a = rand(3, 16),
+                        b = rand(1, a - 2),
+                        c = rand(1, a - b - 1);
+                    let t = a - b - c;
+                    if (t >= 1 && t <= 99) return { target: t, numbers: [a, b, c], expression: `${a} − ${b} − ${c}` };
+                    return null;
+                });
+
+                // 10. (a - b) + c (a > b)
+                patterns.push(() => {
+                    let a = rand(2, 14),
+                        b = rand(1, a - 1),
+                        c = rand(1, 14);
+                    let t = (a - b) + c;
+                    if (t >= 1 && t <= 99) return { target: t, numbers: [a, b, c], expression: `(${a} − ${b}) + ${c}` };
+                    return null;
+                });
+
+                // 11. (c - a) + b (c > a)
+                patterns.push(() => {
+                    let a = rand(1, 12),
+                        c = rand(a + 1, 18),
+                        b = rand(1, 12);
+                    let t = (c - a) + b;
+                    if (t >= 1 && t <= 99) return { target: t, numbers: [a, b, c], expression: `(${c} − ${a}) + ${b}` };
+                    return null;
+                });
+
+                // 12. (a / b) + c (integer)
+                patterns.push(() => {
+                    let b = rand(2, 10);
+                    let a = b * rand(1, 10);
+                    let c = rand(1, 12);
+                    let t = (a / b) + c;
+                    if (t >= 1 && t <= 99 && Number.isInteger(t)) return { target: t, numbers: [a, b, c],
+                        expression: `(${a} ÷ ${b}) + ${c}` };
+                    return null;
+                });
+
+                // 13. (a / b) - c (integer, positive)
+                patterns.push(() => tryDivision(25, () => {
+                    let b = rand(2, 10);
+                    let a = b * rand(2, 12);
+                    let c = rand(1, Math.max((a / b) - 1, 1));
+                    let t = (a / b) - c;
+                    if (t >= 1 && t <= 99 && Number.isInteger(t)) return { target: t, numbers: [a, b, c],
+                        expression: `(${a} ÷ ${b}) − ${c}` };
+                    return null;
+                }));
+
+                return patterns;
             }
-            const yRange = view.yMax - view.yMin;
-            const yStep = chooseNiceStep(yRange);
-            const yStart = Math.ceil(view.yMin/yStep)*yStep;
-            for(let y=yStart;y<=view.yMax+1e-9;y+=yStep){
-                ctx.beginPath(); ctx.moveTo(0,yToPx(y)); ctx.lineTo(w,yToPx(y)); ctx.stroke();
+
+            // ================================================================
+            //  GENERATOR SOAL – SANGAT SULIT (3 ops, 4 angka, target 101-999)
+            // ================================================================
+            function buildSangatSulitPatterns() {
+                const patterns = [];
+
+                // 1. (a + b) * c + d
+                patterns.push(() => {
+                    let a = rand(1, 18),
+                        b = rand(1, 18),
+                        c = rand(1, 14),
+                        d = rand(1, 20);
+                    let t = (a + b) * c + d;
+                    if (t >= 101 && t <= 999) return { target: t, numbers: [a, b, c, d],
+                        expression: `(${a} + ${b}) × ${c} + ${d}` };
+                    return null;
+                });
+
+                // 2. (a + b) * c - d (positive)
+                patterns.push(() => {
+                    let a = rand(1, 18),
+                        b = rand(1, 18),
+                        c = rand(1, 14),
+                        d = rand(1, 30);
+                    let t = (a + b) * c - d;
+                    if (t >= 101 && t <= 999) return { target: t, numbers: [a, b, c, d],
+                        expression: `(${a} + ${b}) × ${c} − ${d}` };
+                    return null;
+                });
+
+                // 3. (a - b) * c + d (a > b)
+                patterns.push(() => {
+                    let a = rand(2, 22),
+                        b = rand(1, a - 1),
+                        c = rand(1, 14),
+                        d = rand(1, 20);
+                    let t = (a - b) * c + d;
+                    if (t >= 101 && t <= 999) return { target: t, numbers: [a, b, c, d],
+                        expression: `(${a} − ${b}) × ${c} + ${d}` };
+                    return null;
+                });
+
+                // 4. (a - b) * c - d (positive)
+                patterns.push(() => {
+                    let a = rand(2, 22),
+                        b = rand(1, a - 1),
+                        c = rand(1, 14),
+                        d = rand(1, 30);
+                    let t = (a - b) * c - d;
+                    if (t >= 101 && t <= 999) return { target: t, numbers: [a, b, c, d],
+                        expression: `(${a} − ${b}) × ${c} − ${d}` };
+                    return null;
+                });
+
+                // 5. (a + b + c) * d
+                patterns.push(() => {
+                    let a = rand(1, 16),
+                        b = rand(1, 16),
+                        c = rand(1, 16),
+                        d = rand(1, 14);
+                    let t = (a + b + c) * d;
+                    if (t >= 101 && t <= 999) return { target: t, numbers: [a, b, c, d],
+                        expression: `(${a} + ${b} + ${c}) × ${d}` };
+                    return null;
+                });
+
+                // 6. (a + b - c) * d (positive)
+                patterns.push(() => {
+                    let a = rand(2, 18),
+                        b = rand(1, 16),
+                        c = rand(1, a + b - 1),
+                        d = rand(1, 14);
+                    let t = (a + b - c) * d;
+                    if (t >= 101 && t <= 999) return { target: t, numbers: [a, b, c, d],
+                        expression: `(${a} + ${b} − ${c}) × ${d}` };
+                    return null;
+                });
+
+                // 7. (a - b + c) * d (positive)
+                patterns.push(() => {
+                    let a = rand(2, 20),
+                        b = rand(1, a - 1),
+                        c = rand(1, 18),
+                        d = rand(1, 14);
+                    let t = (a - b + c) * d;
+                    if (t >= 101 && t <= 999) return { target: t, numbers: [a, b, c, d],
+                        expression: `(${a} − ${b} + ${c}) × ${d}` };
+                    return null;
+                });
+
+                // 8. a * b + c * d
+                patterns.push(() => {
+                    let a = rand(1, 16),
+                        b = rand(1, 16),
+                        c = rand(1, 16),
+                        d = rand(1, 16);
+                    let t = a * b + c * d;
+                    if (t >= 101 && t <= 999) return { target: t, numbers: [a, b, c, d],
+                        expression: `${a} × ${b} + ${c} × ${d}` };
+                    return null;
+                });
+
+                // 9. a * b - c * d (positive)
+                patterns.push(() => {
+                    let a = rand(1, 16),
+                        b = rand(1, 16);
+                    let prod1 = a * b;
+                    let c = rand(1, 14),
+                        d = rand(1, 14);
+                    let prod2 = c * d;
+                    if (prod1 > prod2) { let t = prod1 - prod2; if (t >= 101 && t <= 999) return { target: t,
+                            numbers: [a, b, c, d], expression: `${a} × ${b} − ${c} × ${d}` }; }
+                    return null;
+                });
+
+                // 10. (a * b + c) * d
+                patterns.push(() => {
+                    let a = rand(1, 14),
+                        b = rand(1, 14),
+                        c = rand(1, 20),
+                        d = rand(1, 12);
+                    let t = (a * b + c) * d;
+                    if (t >= 101 && t <= 999) return { target: t, numbers: [a, b, c, d],
+                        expression: `(${a} × ${b} + ${c}) × ${d}` };
+                    return null;
+                });
+
+                // 11. (a * b - c) * d (positive)
+                patterns.push(() => {
+                    let a = rand(1, 14),
+                        b = rand(1, 14);
+                    let prod = a * b;
+                    let c = rand(1, Math.min(prod - 1, 25));
+                    let d = rand(1, 12);
+                    let t = (prod - c) * d;
+                    if (t >= 101 && t <= 999) return { target: t, numbers: [a, b, c, d],
+                        expression: `(${a} × ${b} − ${c}) × ${d}` };
+                    return null;
+                });
+
+                // 12. a * b * c + d
+                patterns.push(() => {
+                    let a = rand(1, 12),
+                        b = rand(1, 12),
+                        c = rand(1, 10),
+                        d = rand(1, 20);
+                    let t = a * b * c + d;
+                    if (t >= 101 && t <= 999) return { target: t, numbers: [a, b, c, d],
+                        expression: `${a} × ${b} × ${c} + ${d}` };
+                    return null;
+                });
+
+                // 13. a * b * c - d (positive)
+                patterns.push(() => {
+                    let a = rand(1, 12),
+                        b = rand(1, 12),
+                        c = rand(1, 10);
+                    let prod = a * b * c;
+                    let d = rand(1, Math.min(prod - 1, 30));
+                    let t = prod - d;
+                    if (t >= 101 && t <= 999) return { target: t, numbers: [a, b, c, d],
+                        expression: `${a} × ${b} × ${c} − ${d}` };
+                    return null;
+                });
+
+                // 14. (a + b) / c * d (integer)
+                patterns.push(() => tryDivision(25, () => {
+                    let c = rand(1, 12),
+                        d = rand(1, 14);
+                    let a = rand(1, 18),
+                        b = rand(1, 18);
+                    let sum = a + b;
+                    if (sum % c === 0) { let t = (sum / c) * d; if (t >= 101 && t <= 999) return { target: t,
+                            numbers: [a, b, c, d], expression: `(${a} + ${b}) ÷ ${c} × ${d}` }; }
+                    return null;
+                }));
+
+                // 15. (a * b) / c + d (integer)
+                patterns.push(() => tryDivision(25, () => {
+                    let c = rand(1, 12),
+                        d = rand(1, 20);
+                    let a = rand(1, 16),
+                        b = rand(1, 16);
+                    let prod = a * b;
+                    if (prod % c === 0) { let t = (prod / c) + d; if (t >= 101 && t <= 999) return { target: t,
+                            numbers: [a, b, c, d], expression: `(${a} × ${b}) ÷ ${c} + ${d}` }; }
+                    return null;
+                }));
+
+                // 16. (a * b) / c - d (integer, positive)
+                patterns.push(() => tryDivision(25, () => {
+                    let c = rand(1, 12),
+                        d = rand(1, 20);
+                    let a = rand(1, 16),
+                        b = rand(1, 16);
+                    let prod = a * b;
+                    if (prod % c === 0) { let t = (prod / c) - d; if (t >= 101 && t <= 999) return { target: t,
+                            numbers: [a, b, c, d], expression: `(${a} × ${b}) ÷ ${c} − ${d}` }; }
+                    return null;
+                }));
+
+                // 17. a * b + c - d (positive)
+                patterns.push(() => {
+                    let a = rand(1, 14),
+                        b = rand(1, 14);
+                    let prod = a * b;
+                    let c = rand(1, 20),
+                        d = rand(1, 20);
+                    let t = prod + c - d;
+                    if (t >= 101 && t <= 999) return { target: t, numbers: [a, b, c, d],
+                        expression: `${a} × ${b} + ${c} − ${d}` };
+                    return null;
+                });
+
+                // 18. a * b - c + d (positive)
+                patterns.push(() => {
+                    let a = rand(1, 14),
+                        b = rand(1, 14);
+                    let prod = a * b;
+                    let c = rand(1, Math.min(prod - 1, 25));
+                    let d = rand(1, 25);
+                    let t = prod - c + d;
+                    if (t >= 101 && t <= 999) return { target: t, numbers: [a, b, c, d],
+                        expression: `${a} × ${b} − ${c} + ${d}` };
+                    return null;
+                });
+
+                // 19. a / (b + c) + d (integer)
+                patterns.push(() => tryDivision(25, () => {
+                    let b = rand(1, 12),
+                        c = rand(1, 12);
+                    let sum = b + c;
+                    let d = rand(1, 20);
+                    let a = sum * rand(1, 12);
+                    let t = (a / sum) + d;
+                    if (t >= 101 && t <= 999 && Number.isInteger(t)) return { target: t, numbers: [a, b, c, d],
+                        expression: `${a} ÷ (${b} + ${c}) + ${d}` };
+                    return null;
+                }));
+
+                // 20. a / (b - c) + d (integer, b > c)
+                patterns.push(() => tryDivision(25, () => {
+                    let b = rand(2, 16),
+                        c = rand(1, b - 1);
+                    let diff = b - c;
+                    let d = rand(1, 20);
+                    let a = diff * rand(1, 12);
+                    let t = (a / diff) + d;
+                    if (t >= 101 && t <= 999 && Number.isInteger(t)) return { target: t, numbers: [a, b, c, d],
+                        expression: `${a} ÷ (${b} − ${c}) + ${d}` };
+                    return null;
+                }));
+
+                return patterns;
             }
-            ctx.restore();
-            ctx.save(); ctx.strokeStyle='#222'; ctx.lineWidth=1.5;
-            if(view.yMin < 0 && view.yMax > 0){ ctx.beginPath(); ctx.moveTo(0,yToPx(0)); ctx.lineTo(w,yToPx(0)); ctx.stroke(); }
-            if(view.xMin < 0 && view.xMax > 0){ ctx.beginPath(); ctx.moveTo(xToPx(0),0); ctx.lineTo(xToPx(0),h); ctx.stroke(); }
-            ctx.restore();
-        }
 
-        function chooseNiceStep(range){
-            const target=8; const raw=range/target; const pow=Math.pow(10, Math.floor(Math.log10(raw))); const norm = raw/pow;
-            if(norm<=1) return pow; if(norm<=2) return 2*pow; if(norm<=5) return 5*pow; return 10*pow;
-        }
+            // ================================================================
+            //  GAME STATE
+            // ================================================================
+            let target = 0,
+                timeLeft = 120,
+                timerInterval = null,
+                gameActive = false;
+            let consecutiveWins = 0;
+            let tripleWinAchieved = false;
+            let totalStartTime = 0;
+            let currentPuzzle = null;
+            let currentDifficulty = 'sulit'; // 'sulit' atau 'sangat_sulit'
 
-        function drawAll(){
-            resizeCanvas();
-            drawGrid();
-            updateLegend();
-            const sampEl = document.getElementById('sampling');
-            const samp = sampEl ? Number(sampEl.value) : 800;
-            const w = canvas.clientWidth, h = canvas.clientHeight;
+            // Kumpulan pola per kesulitan (diinisialisasi setelah)
+            let sulitPatterns = [];
+            let sangatSulitPatterns = [];
 
-            plots.forEach((p, idx)=>{
-                ctx.save();
-                ctx.strokeStyle = p.color; ctx.lineWidth = 2;
-                ctx.beginPath();
-                let first=true;
-                for(let i=0;i<=samp;i++){
-                    const t = i/samp;
-                    const x = view.xMin + t*(view.xMax - view.xMin);
-                    let y;
-                    try { y = p.evaluator(x); } catch { y = NaN; }
-                    if(!isFinite(y)){ first=true; continue; }
-                    const px = xToPx(x), py = yToPx(y);
-                    if(first){ ctx.moveTo(px,py); first=false; } else ctx.lineTo(px,py);
+            const zone = document.getElementById('drop-zone');
+            const timerDisplay = document.getElementById('timerDisplay');
+            const feedbackDiv = document.getElementById('feedback');
+            const challengeMsgSpan = document.getElementById('challengeMsg');
+            const startBtn = document.getElementById('start-btn');
+            const checkBtn = document.getElementById('check-btn');
+            const nextBtn = document.getElementById('next-btn');
+            const targetNumSpan = document.getElementById('target-num');
+            const diffSulit = document.getElementById('diffSulit');
+            const diffSangatSulit = document.getElementById('diffSangatSulit');
+            const diffLabel = document.getElementById('diffLabel');
+
+            // ================================================================
+            //  UI HELPERS
+            // ================================================================
+            function updateTimerUI() {
+                const m = Math.floor(timeLeft / 60).toString().padStart(2, '0');
+                const s = (timeLeft % 60).toString().padStart(2, '0');
+                timerDisplay.innerText = `${m}:${s}`;
+            }
+
+            function stopGameTimer() { if (timerInterval) { clearInterval(timerInterval);
+                    timerInterval = null; } }
+
+            function clearDropZone() {
+                zone.innerHTML = 'Seret angka/operator ke sini...';
+                zone.style.color = "#64748b";
+            }
+
+            // ================================================================
+            //  GENERATE PUZZLE BERDASARKAN KESULITAN
+            // ================================================================
+            function generateRandomPuzzle(difficulty) {
+                const patterns = difficulty === 'sangat_sulit' ? sangatSulitPatterns : sulitPatterns;
+                if (patterns.length === 0) {
+                    // fallback jika pola belum diinisialisasi
+                    return { target: 50, numbers: [5, 5, 5], expression: '5 + 5 + 5' };
                 }
-                ctx.stroke();
-                ctx.restore();
-
-                if(showCritical){
-                    const crits = findCriticalPoints(p.evaluator, view.xMin, view.xMax);
-                    ctx.save(); ctx.fillStyle=p.color; ctx.strokeStyle='#fff';
-                    crits.forEach(pt=>{
-                        if(!isFinite(pt.y)) return;
-                        const px=xToPx(pt.x), py=yToPx(pt.y);
-                        ctx.beginPath(); ctx.arc(px,py,5,0,Math.PI*2); ctx.fill(); ctx.lineWidth=1; ctx.stroke();
-                    });
-                    ctx.restore();
-                }
-            });
-        }
-
-        // numeric derivative
-        function numericDerivative(fn,x){
-            const h = 1e-6;
-            const y1 = fn(x+h), y2 = fn(x-h);
-            if(!isFinite(y1)||!isFinite(y2)) return NaN;
-            return (y1 - y2) / (2*h);
-        }
-
-        function findCriticalPoints(fn, a, b){
-            const N = Math.max(200, Math.min(3000, Number(document.getElementById('sampling').value || 800)));
-            const dx = (b - a)/N;
-            const derivs = [];
-            for(let i=0;i<=N;i++){ const x = a + i*dx; derivs.push({x, d: numericDerivative(fn,x)}); }
-            const roots = [];
-            for(let i=1;i<derivs.length;i++){
-                const A = derivs[i-1], B = derivs[i];
-                if(!isFinite(A.d) || !isFinite(B.d)) continue;
-                if(Math.sign(A.d) === 0){ roots.push(A.x); continue; }
-                if(Math.sign(A.d) !== Math.sign(B.d)){
-                    let lo=A.x, hi=B.x, flo=A.d, fhi=B.d;
-                    for(let iter=0;iter<40;iter++){
-                        const mid = 0.5*(lo+hi);
-                        const fmid = numericDerivative(fn,mid);
-                        if(!isFinite(fmid)) break;
-                        if(Math.sign(fmid) === 0){ lo = hi = mid; break; }
-                        if(Math.sign(fmid) === Math.sign(flo)){ lo=mid; flo=fmid; } else { hi=mid; fhi=fmid; }
+                for (let attempt = 0; attempt < 60; attempt++) {
+                    const fn = patterns[Math.floor(Math.random() * patterns.length)];
+                    const result = fn();
+                    if (result && result.target > 0 && Number.isInteger(result.target)) {
+                        const maxNum = difficulty === 'sangat_sulit' ? 30 : 15;
+                        const valid = result.numbers.every(v => Number.isInteger(v) && v >= 1 && v <= maxNum);
+                        if (valid && result.expression && result.expression !== '?') {
+                            return result;
+                        }
                     }
-                    const root = 0.5*(lo+hi);
-                    if(!roots.some(r=>Math.abs(r-root) < 1e-6)) roots.push(root);
+                }
+                // fallback aman
+                if (difficulty === 'sangat_sulit') {
+                    let a = rand(5, 15),
+                        b = rand(5, 15),
+                        c = rand(2, 10),
+                        d = rand(5, 20);
+                    let t = (a + b) * c + d;
+                    if (t >= 101 && t <= 999) return { target: t, numbers: [a, b, c, d],
+                    expression: `(${a} + ${b}) × ${c} + ${d}` };
+                    return { target: 150, numbers: [5, 5, 5, 5], expression: '(5 + 5) × 5 + 5' };
+                } else {
+                    let a = rand(2, 8),
+                        b = rand(2, 8),
+                        c = rand(2, 6);
+                    let t = (a + b) * c;
+                    if (t >= 1 && t <= 99) return { target: t, numbers: [a, b, c], expression: `(${a} + ${b}) × ${c}` };
+                    return { target: 24, numbers: [3, 5, 3], expression: '(3 + 5) × 3' };
                 }
             }
-            return roots.map(x=>({x, y: fn(x)}));
-        }
 
-        /* Interaction: zoom & pan */
-        canvas.addEventListener('wheel', e=>{
-            e.preventDefault();
-            const rect = canvas.getBoundingClientRect();
-            const mx = e.clientX - rect.left; const my = e.clientY - rect.top;
-            const x = view.xMin + (mx / rect.width) * (view.xMax - view.xMin);
-            const y = view.yMin + (1 - my / rect.height) * (view.yMax - view.yMin);
-            const zoomFactor = e.deltaY < 0 ? 0.9 : 1.1;
-            view.xMin = x + (view.xMin - x) * zoomFactor;
-            view.xMax = x + (view.xMax - x) * zoomFactor;
-            view.yMin = y + (view.yMin - y) * zoomFactor;
-            view.yMax = y + (view.yMax - y) * zoomFactor;
-            drawAll();
-        });
+            function refreshPuzzleUI() {
+                const puzzle = generateRandomPuzzle(currentDifficulty);
+                currentPuzzle = puzzle;
+                target = puzzle.target;
+                targetNumSpan.innerText = target;
+                const numbers = puzzle.numbers;
+                const shelf = document.getElementById('num-shelf');
+                shelf.innerHTML = '';
+                numbers.forEach(n => {
+                    const d = document.createElement('div');
+                    d.className = 'node num';
+                    d.draggable = true;
+                    d.innerText = n;
+                    d.dataset.v = n;
+                    d.addEventListener('dragstart', e => e.dataTransfer.setData('text/plain', n));
+                    shelf.appendChild(d);
+                });
+                // Update label
+                if (currentDifficulty === 'sulit') {
+                    diffLabel.textContent = '(1–99 · 2 ops)';
+                } else {
+                    diffLabel.textContent = '(101–999 · 3 ops)';
+                }
+                // Pastikan semua node di ops-shelf juga draggable
+                attachDragToAllNodes();
+            }
 
-        let dragging=false, last={x:0,y:0};
-        canvas.addEventListener('mousedown', e=>{ dragging=true; last.x=e.clientX; last.y=e.clientY; canvas.style.cursor='grabbing'; });
-        window.addEventListener('mouseup', ()=>{ dragging=false; canvas.style.cursor='default'; });
-        window.addEventListener('mousemove', e=>{
-            if(!dragging) return;
-            const dx = e.clientX - last.x, dy = e.clientY - last.y;
-            last.x = e.clientX; last.y = e.clientY;
-            const w = canvas.clientWidth, h = canvas.clientHeight;
-            const xShift = dx / w * (view.xMax - view.xMin);
-            const yShift = -dy / h * (view.yMax - view.yMin);
-            view.xMin -= xShift; view.xMax -= xShift; view.yMin -= yShift; view.yMax -= yShift;
-            drawAll();
-        });
+            // ================================================================
+            //  END GAME: WIN
+            // ================================================================
+            function endGameWithWin() {
+                if (!gameActive) return;
+                stopGameTimer();
+                gameActive = false;
+                checkBtn.style.display = 'none';
+                nextBtn.style.display = 'block';
 
-        /* utility: export PNG */
-        function exportPNG(){
-            const dataURL = canvas.toDataURL('image/png');
-            const a = document.createElement('a');
-            a.href = dataURL; a.download = 'graph.png';
-            a.click();
-        }
+                consecutiveWins++;
 
-        /* helpers */
-        function toggleCritical(){ showCritical = !showCritical; drawAll(); }
+                if (consecutiveWins >= 3) {
+                    tripleWinAchieved = true;
+                    const totalDuration = Math.floor((Date.now() - totalStartTime) / 1000);
+                    const mins = Math.floor(totalDuration / 60);
+                    const secs = totalDuration % 60;
 
-        /* initial draw */
-        function resizeCanvas(){ 
-            const rect = canvas.getBoundingClientRect();
-            DPR = window.devicePixelRatio || 1;
-            canvas.width = Math.round(rect.width * DPR); canvas.height = Math.round(rect.height * DPR);
-            ctx.setTransform(DPR,0,0,DPR,0,0);
-        }
-        resizeCanvas();
-        window.addEventListener('load', ()=>{ resizeCanvas(); drawAll(); });
-        window.addEventListener('resize', ()=>{ resizeCanvas(); drawAll(); });
+                    challengeMsgSpan.innerHTML = "🏆 REKOR TERCAPAI! 🏆";
+                    challengeMsgSpan.style.background = "#eab308";
 
-        /* convenience: allow pressing Enter in graph input to plot */
-        document.getElementById('graph-input').addEventListener('keydown', e => { if(e.key==='Enter'){ plotFromInput(); } });
+                    feedbackDiv.innerHTML = `
+                    <div style="display:inline-block;perspective:600px;">
+                      <div class="scene"><div class="trophy">
+                        <span>🏆</span><span>🏆</span><span>🏆</span>
+                        <span>🏆</span><span>🏆</span><span>🏆</span>
+                      </div></div>
+                    </div>
+                    <div style="font-size:1.5rem;color:#eab308;">Ketajaman nalar aritmetika Anda sungguh luar biasa!</div>
+                    <div style="margin:10px 0;">SELAMAT TANTANGAN BERHASIL DISELESAIKAN!</div>
+                    <div style="background:#1e293b;color:#facc15;padding:10px;border-radius:20px;display:inline-block;">
+                      ⏱️ TOTAL DURASI: ${mins} Menit ${secs} Detik
+                    </div>
+                    <br><br>TEKAN 'SOAL BARU' UNTUK MULAI DARI AWAL!
+                  `;
+                    consecutiveWins = 0;
+                } else {
+                    challengeMsgSpan.innerHTML = `⚡ TANTANGAN: ${3-consecutiveWins} KEMENANGAN LAGI! ⚡`;
+                    challengeMsgSpan.style.background = "linear-gradient(95deg, #f97316, #dc2626)";
+                    feedbackDiv.innerHTML = "🎉✨ SELAMAT! JAWABAN TEPAT! ✨🎉<br>Lanjut ke soal berikutnya!";
+                }
 
-        /* Plot helper that also supports multi-plot sequentially */
-        function plotFromInput(){
-            plotFromInputInternal();
-        }
-        function plotFromInputInternal(){
-            const txt = document.getElementById('graph-input').value.trim();
-            if(!txt) return;
-            const ev = parseToEvaluator(txt);
-            if(!ev){ alert('Ekspresi grafik tidak valid. Periksa sintaks fungsi.'); return; }
-            plots.push({text: txt, evaluator: ev, color: COLORS[(plots.length) % COLORS.length]});
-            updateLegend(); drawAll();
-        }
+                feedbackDiv.style.display = 'block';
+                feedbackDiv.style.color = "#16a34a";
 
-        /* alias for GUI button */
-        function plotFunction(){ plotFromInputInternal(); }
-        function graphInsert(t){ document.getElementById('graph-input').value = t; }
+                startCelebration(() => {
+                    if (!tripleWinAchieved) {
+                        feedbackDiv.innerHTML = "🎆 Selebrasi selesai! Tekan 'SOAL BARU' untuk lanjut. 🎆";
+                    }
+                });
+            }
 
-        /* clear/legend functions compatible with earlier names */
-        function clearPlots(){ plots=[]; updateLegend(); drawAll(); }
+            // ================================================================
+            //  END GAME: TIMEOUT — TAMPILKAN JAWABAN
+            // ================================================================
+            function endGameTimeout() {
+                if (!gameActive) return;
+                stopGameTimer();
+                gameActive = false;
+                consecutiveWins = 0;
+                challengeMsgSpan.innerHTML = "⚡ TANTANGAN: 3 JAWABAN BENAR BERTURUT-TURUT! ⚡";
+                challengeMsgSpan.style.background = "linear-gradient(95deg, #f97316, #dc2626)";
+                checkBtn.style.display = 'none';
+                nextBtn.style.display = 'block';
+                feedbackDiv.style.display = 'block';
 
-        /* update legend (reuse) */
-        function updateLegend(){
-            const L = document.getElementById('legend'); L.innerHTML = '';
-            plots.forEach(p => {
-                const div = document.createElement('div'); div.className='legend-item';
-                div.innerHTML = `<span class="color-swatch" style="background:${p.color}"></span><span>${p.text}</span>`;
-                L.appendChild(div);
+                let answerHtml = '';
+                if (currentPuzzle && currentPuzzle.expression) {
+                    answerHtml = `
+                    <div class="answer-reveal">
+                      💡 JAWABAN: ${currentPuzzle.expression} = ${currentPuzzle.target}
+                    </div>
+                  `;
+                } else {
+                    answerHtml = `<div class="answer-reveal">💡 JAWABAN: ${target}</div>`;
+                }
+
+                feedbackDiv.innerHTML = `
+                  ⏰ WAKTU HABIS! <br />
+                  ${answerHtml}
+                  <br /><span style="font-size:0.9rem;opacity:0.7;">Tekan 'SOAL BARU' untuk tantangan ulang.</span>
+                `;
+                feedbackDiv.style.color = "#b91c1c";
+                forceStopCelebration();
+            }
+
+            // ================================================================
+            //  START GAME
+            // ================================================================
+            function startGame(resetStreak = true) {
+                if (tripleWinAchieved) { resetStreak = true;
+                    tripleWinAchieved = false; }
+                forceStopCelebration();
+                if (timerInterval) clearInterval(timerInterval);
+                if (resetStreak) {
+                    consecutiveWins = 0;
+                    challengeMsgSpan.innerHTML = "⚡ TANTANGAN: 3 JAWABAN BENAR BERTURUT-TURUT! ⚡";
+                    challengeMsgSpan.style.background = "linear-gradient(95deg, #f97316, #dc2626)";
+                } else {
+                    if (consecutiveWins >= 3) {
+                        challengeMsgSpan.innerHTML = "🏆 LUAR BIASA! 3 KEMENANGAN BERUNTUN! 🏆";
+                        challengeMsgSpan.style.background = "#eab308";
+                    } else {
+                        challengeMsgSpan.innerHTML =
+                            `⚡ TANTANGAN: ${3-consecutiveWins} KEMENANGAN LAGI UNTUK REKOR! ⚡`;
+                    }
+                }
+
+                if (consecutiveWins === 0) { totalStartTime = Date.now(); }
+
+                gameActive = true;
+                timeLeft = 120;
+                updateTimerUI();
+                refreshPuzzleUI();
+                clearDropZone();
+                startBtn.style.display = 'none';
+                nextBtn.style.display = 'none';
+                checkBtn.style.display = 'block';
+                feedbackDiv.style.display = 'none';
+                feedbackDiv.innerHTML = '';
+
+                timerInterval = setInterval(() => {
+                    if (!gameActive) return;
+                    if (timeLeft <= 0) {
+                        clearInterval(timerInterval);
+                        timerInterval = null;
+                        endGameTimeout();
+                    } else {
+                        timeLeft--;
+                        updateTimerUI();
+                    }
+                }, 1000);
+            }
+
+            // ================================================================
+            //  EVALUATE EXPRESSION
+            // ================================================================
+            function evaluateExpression() {
+                if (!gameActive) { alert("Permainan belum dimulai. Tekan MULAI!"); return false; }
+                const children = zone.querySelectorAll('span');
+                if (children.length === 0) { alert("Zona kosong! Drag angka dan operator terlebih dahulu."); return false; }
+                let expr = "";
+                children.forEach(span => {
+                    let val = span.dataset.v;
+                    if (val === '×') val = '*';
+                    if (val === '÷') val = '/';
+                    if (val === '−') val = '-';
+                    expr += val;
+                });
+                try {
+                    const result = Function('"use strict"; return (' + expr + ')')();
+                    if (Math.abs(result - target) < 0.000001) { endGameWithWin(); return true; } else {
+                        alert(`Hasil = ${result}, belum sama dengan target ${target}. Coba lagi!`);
+                        return false;
+                    }
+                } catch (e) { alert("Ekspresi tidak valid! Gunakan kurung dan operator dengan benar."); return false; }
+            }
+
+            // ================================================================
+            //  DRAG & DROP
+            // ================================================================
+            zone.addEventListener('dragover', e => e.preventDefault());
+            zone.addEventListener('drop', e => {
+                e.preventDefault();
+                if (!gameActive) { alert("Permainan belum aktif. Tekan MULAI!"); return; }
+                const rawVal = e.dataTransfer.getData('text/plain');
+                if (!rawVal) return;
+                if (zone.innerHTML.includes('Seret angka/operator ke sini...')) {
+                    zone.innerHTML = '';
+                    zone.style.color = "inherit";
+                }
+                const newSpan = document.createElement('span');
+                newSpan.className = 'node';
+                newSpan.innerText = rawVal;
+                newSpan.dataset.v = rawVal;
+                newSpan.style.margin = "0 5px";
+                newSpan.style.cursor = "pointer";
+                newSpan.onclick = (ev) => {
+                    ev.stopPropagation();
+                    newSpan.remove();
+                    if (zone.children.length === 0) {
+                        zone.innerHTML = 'Seret angka/operator ke sini...';
+                        zone.style.color = "#64748b";
+                    }
+                };
+                zone.appendChild(newSpan);
             });
-        }
 
-        /* expose some functions to UI names used earlier */
-        window.plotFromInput = plotFromInput;
-        window.clearPlots = clearPlots;
-        window.toggleCritical = toggleCritical;
-        window.exportPNG = exportPNG;
-        window.graphInsert = graphInsert;
-        window.plotFunction = plotFromInputInternal;
-        window.clearPlot = clearPlots;
+            function attachDragToAllNodes() {
+                document.querySelectorAll('.node').forEach(node => {
+                    if (!node.hasAttribute('data-drag-attached')) {
+                        node.setAttribute('draggable', 'true');
+                        node.setAttribute('data-drag-attached', 'true');
+                        node.addEventListener('dragstart', (e) => {
+                            e.dataTransfer.setData('text/plain', node.dataset.v || node.innerText);
+                        });
+                    }
+                });
+            }
+            const shelfObserver = new MutationObserver(() => attachDragToAllNodes());
+            shelfObserver.observe(document.getElementById('num-shelf'), { childList: true, subtree: true });
+            shelfObserver.observe(document.getElementById('ops-shelf'), { childList: true, subtree: true });
+            attachDragToAllNodes();
+
+            // ================================================================
+            //  DIFFICULTY TOGGLE
+            // ================================================================
+            function setDifficulty(diff) {
+                currentDifficulty = diff;
+                diffSulit.classList.remove('active-sulit', 'active-sangat_sulit');
+                diffSangatSulit.classList.remove('active-sulit', 'active-sangat_sulit');
+                if (diff === 'sulit') {
+                    diffSulit.classList.add('active-sulit');
+                    diffLabel.textContent = '(1–99 · 2 ops)';
+                } else {
+                    diffSangatSulit.classList.add('active-sangat_sulit');
+                    diffLabel.textContent = '(101–999 · 3 ops)';
+                }
+                // Jika game tidak aktif, langsung refresh tampilan
+                if (!gameActive && startBtn.style.display !== 'none') {
+                    refreshPuzzleUI();
+                    clearDropZone();
+                }
+            }
+
+            diffSulit.addEventListener('click', () => setDifficulty('sulit'));
+            diffSangatSulit.addEventListener('click', () => setDifficulty('sangat_sulit'));
+
+            // ================================================================
+            //  EVENT HANDLER
+            // ================================================================
+            startBtn.onclick = () => startGame(true);
+            checkBtn.onclick = () => { if (gameActive) evaluateExpression();
+                else alert("Mulai dulu!"); };
+
+            nextBtn.onclick = () => {
+                if (fireworksActive) { forceStopCelebration(); }
+                if (tripleWinAchieved) { tripleWinAchieved = false; }
+                startGame(false);
+            };
+
+            // ================================================================
+            //  MANUAL MODAL
+            // ================================================================
+            const modal = document.getElementById('manualModal');
+            document.getElementById('openManualBtn').onclick = () => {
+                modal.classList.add('open');
+                setTimeout(() => {
+                    if (window.renderMathInElement) {
+                        window.renderMathInElement(document.querySelector('.manual-card'), {
+                            delimiters: [
+                                { left: '\\(', right: '\\)', display: false },
+                                { left: '\\[', right: '\\]', display: true }
+                            ]
+                        });
+                    } else {
+                        document.querySelectorAll('.latex-example').forEach(el => {
+                            try {
+                                katex.render(el.textContent.trim(), el, { throwOnError: false });
+                            } catch (_) {}
+                        });
+                    }
+                }, 100);
+            };
+            document.getElementById('closeManualBtn').onclick = () => modal.classList.remove('open');
+            modal.addEventListener('click', (e) => { if (e.target === modal) modal.classList.remove('open'); });
+
+            // Inisialisasi KaTeX
+            document.addEventListener('DOMContentLoaded', function() {
+                if (window.renderMathInElement) {
+                    window.renderMathInElement(document.body, {
+                        delimiters: [
+                            { left: '\\(', right: '\\)', display: false },
+                            { left: '\\[', right: '\\]', display: true }
+                        ]
+                    });
+                }
+            });
+
+            const katexScript = document.createElement('script');
+            katexScript.src = 'https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js';
+            katexScript.onload = function() {
+                if (window.renderMathInElement) {
+                    window.renderMathInElement(document.body, {
+                        delimiters: [
+                            { left: '\\(', right: '\\)', display: false },
+                            { left: '\\[', right: '\\]', display: true }
+                        ]
+                    });
+                }
+            };
+            document.head.appendChild(katexScript);
+
+            document.body.addEventListener('click', () => { if (audioCtx.state === 'suspended') audioCtx.resume(); }, { once: true });
+
+            // ================================================================
+            //  INISIALISASI
+            // ================================================================
+            // Bangun pola
+            sulitPatterns = buildSulitPatterns();
+            sangatSulitPatterns = buildSangatSulitPatterns();
+
+            targetNumSpan.innerText = '??';
+            clearDropZone();
+            startBtn.style.display = 'block';
+            checkBtn.style.display = 'none';
+            nextBtn.style.display = 'none';
+            consecutiveWins = 0;
+            challengeMsgSpan.innerHTML = "⚡ TANTANGAN: 3 JAWABAN BENAR BERTURUT-TURUT! ⚡";
+            const dummyShelf = document.getElementById('num-shelf');
+            dummyShelf.innerHTML = '<div class="node num">?</div><div class="node num">?</div><div class="node num">?</div>';
+            setDifficulty('sulit');
+            refreshPuzzleUI();
+
+        })();
     </script>
+
 </body>
 </html>
